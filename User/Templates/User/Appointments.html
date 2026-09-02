@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0">
+        <title>Appointments</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body 
+            {
+                margin: 0;
+                padding: 40px;
+                background-color: #f5faff;
+            }
+            .container 
+            {
+                max-width: 650px;
+                margin: auto;
+                background-color: white;
+                padding: 30px;
+                border-radius: 12px;
+                border: 2px solid #333;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
+            h2 
+            {
+                text-align: center;
+                margin-bottom: 25px;
+                color: #000;
+            }
+            .form-group 
+            {
+                margin-bottom: 20px;
+            }
+            label 
+            {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                color: #000;
+            }
+            input,
+            textarea,
+            select 
+            {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #b9e7f8;
+                border-radius: 6px;
+                font-size: 15px;
+            }
+            textarea 
+            {
+                resize: vertical;
+            }
+            input:focus,
+            textarea:focus,
+            select:focus 
+            {
+                outline: none;
+                border-color: #f3a6c2;
+            }
+            .btn 
+            {
+                background-color: #9ddcf5;
+                color: #000;
+                border: none;
+                padding: 12px 22px;
+                border-radius: 6px;
+                font-size: 15px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            .btn:hover 
+            {
+                background-color: #f3a6c2;
+            }
+            @media (max-width: 600px) 
+            {
+                body 
+                {
+                    padding: 20px;
+                }
+                .container 
+                {
+                    padding: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>📅Appointments</h2>
+            <form>
+                <!-- Appointment Date -->
+                <div class="form-group">
+                    <label>Appointment Date</label>
+                    <input type="date">
+                </div>
+                <!-- Appointment Time -->
+                <div class="form-group">
+                    <label>Appointment Time</label>
+                    <input type="time">
+                </div>
+                <!-- Doctor -->
+                <div class="form-group">
+                    <label>Doctor Name</label>
+                    <input type="text"
+                        placeholder="Enter doctor name">
+                </div>
+                <!-- Reason -->
+                <div class="form-group">
+                    <label>Reason</label>
+                    <textarea
+                        rows="3"
+                        placeholder="Enter reason for appointment"></textarea>
+                </div>
+                <!-- Button -->
+                <button type="submit" class="btn">
+                    Book Appointment
+                </button>
+            </form>
+        </div>
+    </body>
+</html>

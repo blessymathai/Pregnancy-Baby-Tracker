@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manage Milestones</title>
+        <style>
+            *{
+                margin:0;
+                padding:0;
+                box-sizing:border-box;
+                font-family:Arial, Helvetica, sans-serif;
+            }
+            body
+            {
+                background:#f4f6f9;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                height:100vh;
+            }
+            form
+            {
+                background:#fff;
+                padding:30px;
+                border-radius:10px;
+                box-shadow:0 4px 10px rgba(0,0,0,0.2);
+            }
+            table
+            {
+                border-collapse:collapse;
+                width:500px;
+            }
+            td{
+                padding:12px;
+            }
+            td:first-child
+            {
+                font-weight:bold;
+                width:150px;
+            }
+            input[type="text"],
+            textarea{
+                width:100%;
+                padding:10px;
+                border:1px solid #ccc;
+                border-radius:5px;
+                font-size:15px;
+                outline:none;
+            }
+            textarea
+            {
+                resize:none;
+                height:100px;
+            }
+            input[type="text"]:focus,
+            textarea:focus
+            {
+                border:1px solid #007BFF;
+            }
+            input[type="submit"]
+            {
+                background:#28a745;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                border-radius:5px;
+                cursor:pointer;
+                margin-right:10px;
+            }
+            input[type="submit"]:hover
+            {
+                background:#218838;
+            }
+            input[type="reset"]
+            {
+                background:#dc3545;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                border-radius:5px;
+                cursor:pointer;
+            }
+            input[type="reset"]:hover
+            {
+                background:#c82333;
+            }
+            h2{
+                text-align:center;
+                margin-bottom:20px;
+                color:#333;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="" method="post">
+            {% csrf_token %}
+            <h2>Manage Milestones</h2>
+            <table>
+                <tr>
+                    <td>Week</td>
+                    <td>
+                        <input type="text" name="txt_week" placeholder="Enter Week">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Milestone</td>
+                    <td>
+                        <input type="text" name="txt_milestone" placeholder="Enter milestone title">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>
+                        <textarea name="txt_description" placeholder="Enter milestone description"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <input type="submit" value="Add">
+                        <input type="reset" value="Delete">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>
+{% if msg %}
+<script>
+    alert("{{ msg }}");
+    window.location="{% url 'Administrator:ManageMilestones' %}";
+</script>
+{% endif %}

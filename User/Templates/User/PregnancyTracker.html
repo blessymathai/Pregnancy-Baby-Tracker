@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pregnancy Tracker</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body 
+            {
+                background-color: #f5faff;
+                padding: 40px;
+            }
+            .container 
+            {
+                max-width: 800px;
+                margin: auto;
+                background-color: white;
+                padding: 30px;
+                border-radius: 12px;
+                border: 2px solid #050505;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
+            h2 
+            {
+                text-align: center;
+                color: #000;
+                margin-bottom: 25px;
+            }
+            /* Pregnancy Progress */
+            .progress 
+            {
+                width: 100%;
+                height: 28px;
+                background-color: #e8e8e8;
+                border-radius: 15px;
+                overflow: hidden;
+                margin-bottom: 25px;
+            }
+            .progress-bar 
+            {
+                width: 65%;
+                height: 100%;
+                background-color: #f3a6c2;
+                color: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            /* Milestone */
+            .alert 
+            {
+                padding: 18px;
+                margin-bottom: 25px;
+                border-radius: 8px;
+                background-color: #dff5fc;
+                border: 1px solid #0a0a0a;
+                color: #000;
+            }
+            .alert strong 
+            {
+                color: #d45b83;
+            }
+            /* Form */
+            .form-group 
+            {
+                margin-bottom: 20px;
+            }
+            label 
+            {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                color: #000;
+            }
+            textarea,
+            select 
+            {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #0a0a0a;
+                border-radius: 6px;
+                font-size: 15px;
+            }
+            textarea 
+            {
+                resize: vertical;
+            }
+            textarea:focus,
+            select:focus 
+            {
+                outline: none;
+                border-color: #f3a6c2;
+            }
+            /* Button */
+            .btn 
+            {
+                background-color: #9ddcf5;
+                color: #000;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 6px;
+                font-size: 15px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            .btn:hover 
+            {
+                background-color: #f3a6c2;
+            }
+            /* Mobile */
+            @media (max-width: 600px) 
+            {
+                body 
+                {
+                    padding: 20px;
+                }
+                .container 
+                {
+                    padding: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        <h2>🤰 Pregnancy Tracker</h2>
+        <!-- Pregnancy Week -->
+        <div class="form-group">
+            <label>Current Pregnancy Week</label>
+            <input type="number"
+                   id="currentWeek"
+                   min="0"
+                   max="40"
+                   placeholder="Enter current week"
+                   oninput="updateProgress()">
+        </div>
+        <!-- Pregnancy Progress -->
+        <div class="progress">
+            <div class="progress-bar" id="progressBar">
+                0 / 40 Weeks
+            </div>
+        </div>
+        <!-- Weekly Milestone -->
+        <div class="alert">
+            <strong>Week Milestone:</strong>
+            <input type="text"
+                   id="milestone"
+                   placeholder="Enter this week's milestone">
+        </div>
+        <!-- Symptoms -->
+        <div class="form-group">
+            <label>Today's Symptoms</label>
+            <textarea
+                rows="3"
+                placeholder="Enter symptoms such as back pain, nausea, fatigue..."></textarea>
+        </div>
+        <!-- Mood -->
+        <div class="form-group">
+            <label>Mood / Emotions</label>
+            <select>
+                <option value="">Select Mood</option>
+                <option>Happy</option>
+                <option>Anxious</option>
+                <option>Tired</option>
+                <option>Excited</option>
+                <option>Calm</option>
+            </select>
+        </div>
+        <button type="button" class="btn">
+            Save Daily Record
+        </button>
+    </div>
+    <script>
+        function updateProgress() 
+        {
+            let week = document.getElementById("currentWeek").value;
+            if (week < 1) 
+            {
+                week = 1;
+            }
+            if (week > 40) 
+            {
+                week = 40;
+            }
+            let percentage = (week / 40) * 100;
+            document.getElementById("progressBar").style.width =percentage + "%";
+            document.getElementById("progressBar").innerHTML =week + " / 40 Weeks";
+        }
+        </script>
+    </body>
+</html>

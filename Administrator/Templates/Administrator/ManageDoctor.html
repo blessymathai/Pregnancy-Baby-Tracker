@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manage Doctor</title>
+        <style>
+            *{
+                margin:0;
+                padding:0;
+                box-sizing:border-box;
+                font-family:Arial, Helvetica, sans-serif;
+            }
+            body
+            {
+                background:#f4f6f9;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                height:100vh;
+            }
+            form
+            {
+                background:#fff;
+                padding:30px;
+                border-radius:10px;
+                box-shadow:0 4px 10px rgba(0,0,0,0.2);
+            }
+            table
+            {
+                border-collapse:collapse;
+                width:450px;
+            }
+            td
+            {
+                padding:12px;
+            }
+            td:first-child{
+                font-weight:bold;
+                width:120px;
+            }
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"]
+            {
+                width:100%;
+                padding:10px;
+                border:1px solid #ccc;
+                border-radius:5px;
+                outline:none;
+                font-size:15px;
+            }
+            input[type="text"]:focus,
+            input[type="email"]:focus,
+            input[type="tel"]:focus
+            {
+                border:1px solid #007BFF;
+            }
+            input[type="submit"]
+            {
+                background:#28a745;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                border-radius:5px;
+                cursor:pointer;
+                font-size:15px;
+                margin-right:10px;
+            }
+            input[type="submit"]:hover
+            {
+                background:#218838;
+            }
+            input[type="reset"]
+            {
+                background:#dc3545;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                border-radius:5px;
+                cursor:pointer;
+                font-size:15px;
+            }
+            input[type="reset"]:hover
+            {
+                background:#c82333;
+            }
+            h2
+            {
+                text-align:center;
+                margin-bottom:20px;
+                color:#333;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="" method="post">
+            {% csrf_token %}
+            <h2>Manage Doctor</h2>
+                <table>
+                    <tr>
+                        <td>Doctor Name</td>
+                        <td><input type="text" name="txt_name" required></td>
+                    </tr>
+                    <tr>
+                        <td>Specialization</td>
+                        <td><input type="text" name="txt_specialization" required></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input type="email" name="txt_email" required></td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td><input type="tel" name="txt_phone" required></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <input type="submit" value="Add">
+                            <input type="reset" value="Delete">
+                        </td>
+                    </tr>
+                </table>
+                <table border="1" align="center" cellpadding="10">
+                <tr>
+                    <td>SL No</td>
+                    <td>Doctor Name</td>
+                    <td>Specialization</td>
+                    <td>Email</td>
+                    <td>Phone</td>
+                    <td>Action</td>
+                </tr>
+                {% for i in doctor %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.doctor_name }}</td>
+                    <td>{{ i.specialization }}</td>
+                    <td>{{ i.email }}</td>
+                    <td>{{ i.phone }}</td>
+                    <td>
+                        <a href="{% url 'Administrator:EditDoctor' i.id %}">Edit</a> |
+                        <a href="{% url 'Administrator:DeleteDoctor' i.id %}" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </body>
+</html>
+{% if msg %}
+<script>
+    alert("{{ msg }}");
+    window.location="{% url 'Administrator:ManageDoctor' %}";
+</script>
+{% endif %}

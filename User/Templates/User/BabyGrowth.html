@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0">
+        <title>Baby Growth</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body 
+            {
+                margin: 0;
+                padding: 40px;
+                background-color: #f5faff;
+            }
+            .container 
+            {
+                max-width: 700px;
+                margin: auto;
+                background-color: white;
+                padding: 30px;
+                border-radius: 12px;
+                border: 2px solid #0d0d0e;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            }
+            h2 
+            {
+                text-align: center;
+                color: #000;
+                margin-bottom: 25px;
+            }
+            .row 
+            {
+                display: flex;
+                gap: 20px;
+            }
+            .card 
+            {
+                width: 50%;
+                padding: 25px;
+                border-radius: 10px;
+                text-align: center;
+            }
+            .height-card 
+            {
+                background-color: #9ddcf5;
+            }
+            .status-card 
+            {
+                background-color: #f3a6c2;
+            }
+            label 
+            {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: bold;
+                color: #000;
+            }
+            input 
+            {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #aaa;
+                border-radius: 6px;
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            input:focus 
+            {
+                outline: none;
+                border-color: #000;
+            }
+            .btn 
+            {
+                display: block;
+                margin: 25px auto 0;
+                padding: 12px 25px;
+                border: none;
+                border-radius: 6px;
+                background-color: #000;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            .btn:hover 
+            {
+                background-color: #444;
+            }
+            @media (max-width: 600px) 
+            {
+                body 
+                {
+                    padding: 20px;
+                }
+                .row 
+                {
+                    flex-direction: column;
+                }
+                .card 
+                {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>👶 Baby Growth</h2>
+            <div class="row">
+                <!-- Height -->
+                <div class="card height-card">
+                    <label>Baby Height (cm)</label>
+                    <input type="number"
+                        step="0.1"
+                        placeholder="Enter height">
+                </div>
+                <!-- Growth Status -->
+                <div class="card status-card">
+                    <label>Growth Status</label>
+                    <input type="text"
+                        placeholder="Enter growth status">
+                </div>
+            </div>
+            <button type="button" class="btn">
+                Save Growth Details
+            </button>
+        </div>
+    </body>
+</html>
