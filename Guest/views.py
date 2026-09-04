@@ -5,6 +5,29 @@ from .models import tbl_registration
 def HomePage(request):
     return render(request, 'Guest/HomePage.html')
 
+# def Login(request):
+#     if request.method == "POST":
+#         email = request.POST.get('user_email')
+#         password = request.POST.get('user_password')
+#         try:
+#             user = tbl_registration.objects.get(
+#                 user_email=email,
+#                 user_password=password
+#             )
+#             request.session['user_id'] = user.id
+#             request.session['user_name'] = user.user_name
+#             request.session['user_email'] = user.user_email
+#             return redirect('User:UserDashboard')
+#         except tbl_registration.DoesNotExist:
+#             return render(
+#                 request,
+#                 'Guest/login.html',
+#                 {
+#                     'error': 'Invalid email or password'
+#                 }
+#             )
+#     return render(request, 'Guest/login.html')
+
 def Login(request):
     if request.method == "POST":
         email = request.POST.get("txt_email", "").strip()
@@ -83,4 +106,3 @@ def UserRegistrationView(request):
 def Logout(request):
     logout(request)
     return redirect('Login')
-

@@ -8,6 +8,22 @@ def UserDashboard(request):
         return redirect("Guest:Login")
     return render(request,"User/UserDashboard.html")
 
+# def UserDashboard(request):
+#     context = {
+#         'current_week': 1,
+#         'total_weeks': 40,
+#         'week_milestone': (
+#             "Your body is preparing for pregnancy. "
+#             "Maintain a healthy lifestyle and start tracking your pregnancy."
+#         ),
+#         'symptoms': [
+#             "Mild abdominal discomfort",
+#             "Feeling tired",
+#         ],
+#         'mood': "Happy",
+#     }
+#     return render(request, 'User/user_dashboard.html', context)
+
 def PregnancyProfile(request): 
     return render(request, 'User/PregnancyProfile.html')
 
