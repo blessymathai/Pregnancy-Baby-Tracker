@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Baby Records</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            background: #173b57;
+            padding: 25px 15px;
+        }
+
+        .sidebar h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover,
+        .sidebar .active {
+            background: #2c6e9e;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.07);
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- Sidebar -->
+
+        <div class="col-md-3 col-lg-2 sidebar">
+
+            <h3>Doctor Panel</h3>
+
+            <a href="{% url 'DoctorDashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'DoctorPatients' %}">
+                Patients
+            </a>
+
+            <a href="{% url 'DoctorAppointments' %}">
+                Appointments
+            </a>
+
+            <a href="{% url 'PregnancyRecords' %}">
+                Pregnancy Records
+            </a>
+
+            <a href="{% url 'BabyRecords' %}" class="active">
+                Baby Records
+            </a>
+
+            <a href="{% url 'Prescriptions' %}">
+                Prescriptions
+            </a>
+
+            <a href="{% url 'DoctorMessages' %}">
+                Messages
+            </a>
+
+            <a href="{% url 'DoctorAIChatbox' %}">
+                AI Chatbox
+            </a>
+
+            <hr>
+
+            <a href="{% url 'Login' %}">
+                Logout
+            </a>
+
+        </div>
+
+
+        <!-- Content -->
+
+        <div class="col-md-9 col-lg-10 content">
+
+            <h2>Baby Records</h2>
+
+            <p class="text-muted">
+                Monitor baby growth and development.
+            </p>
+
+
+            <div class="card p-4 mt-4">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead>
+
+                            <tr>
+                                <th>#</th>
+                                <th>Mother</th>
+                                <th>Baby Name</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Weight</th>
+                                <th>Height</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for baby in baby_records %}
+
+                            <tr>
+
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+
+                                <td>
+                                    {{ baby.user }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ baby.baby_name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ baby.date_of_birth }}
+                                </td>
+
+                                <td>
+                                    {{ baby.gender }}
+                                </td>
+
+                                <td>
+                                    {{ baby.weight|default:"-" }} kg
+                                </td>
+
+                                <td>
+                                    {{ baby.height|default:"-" }} cm
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="7"
+                                    class="text-center text-muted py-4">
+
+                                    No baby records available.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

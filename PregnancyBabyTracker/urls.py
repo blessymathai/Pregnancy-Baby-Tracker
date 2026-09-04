@@ -38,6 +38,7 @@ urlpatterns = [
     path("User/", include("User.urls")),
     path("Guest/", include("Guest.urls")),
     path("Administrator/", include("Administrator.urls")),
+    path("Doctor/", include("Doctor.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
