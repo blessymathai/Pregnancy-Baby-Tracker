@@ -188,7 +188,7 @@
 
                 <div>
                     <strong>
-                        👨‍⚕️ Dr. {{ request.session.doctor_name }}
+                        👨‍⚕️ Doctor
                     </strong>
                 </div>
 
@@ -202,7 +202,8 @@
                 <div class="welcome-card">
 
                     <h2>
-                        Welcome, Dr. {{ request.session.doctor_name }} 👋
+                        Welcome, Doctor👋
+                        <!-- Welcome, Dr. {{ request.session.doctor_name }} 👋 -->
                     </h2>
 
                     <p class="mb-0">
@@ -281,29 +282,26 @@
 
                     </div>
 
-
-                    <!-- BABY RECORDS -->
+                <!-- Notifications -->
                     <div class="col-md-6 col-xl-3">
 
                         <div class="stat-card">
 
                             <div class="icon">
-                                👶
+                                💬
                             </div>
 
                             <h6 class="text-muted">
-                                Baby Records
+                                Notifications
                             </h6>
 
                             <h2>
-                                {{ baby_records|default:"0" }}
+                                {{ Notification|default:"0" }}
                             </h2>
 
                         </div>
 
                     </div>
-
-                </div>
 
 
                 <!-- ================= QUICK ACTIONS ================= -->

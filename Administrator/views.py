@@ -187,28 +187,6 @@ def AdminDashboard(request):
         'datasets': tbl_Dataset.objects.count(),
     })
 
-# def AdminDashboard(request):
-
-#     if request.session.get('role') != 'ADMIN':
-#         return redirect('Guest:Login')
-
-#     pregnancies = tbl_PregnancyTracker.objects.select_related(
-#         'user'
-#     ).order_by('-id')
-
-#     total_pregnancies = tbl_PregnancyTracker.objects.count()
-
-#     context = {
-#         'pregnancies': pregnancies,
-#         'total_pregnancies': total_pregnancies,
-#     }
-
-#     return render(
-#         request,
-#         'Administrator/AdminDashboard.html',
-#         context
-#     )
-
 def ManageUser(request):
     if (r := admin_guard(request)): return r
     if request.method == 'POST':

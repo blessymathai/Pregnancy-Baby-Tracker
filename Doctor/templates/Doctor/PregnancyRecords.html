@@ -56,6 +56,26 @@
             box-shadow: 0 4px 15px rgba(0,0,0,.07);
         }
 
+        .form-label {
+            font-weight: 600;
+        }
+
+        .btn-save {
+            background: #173b57;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+        }
+
+        .btn-save:hover {
+            background: #2c6e9e;
+            color: white;
+        }
+
+        table th {
+            white-space: nowrap;
+        }
+
     </style>
 
 </head>
@@ -66,7 +86,7 @@
 
     <div class="row">
 
-        <!-- Sidebar -->
+        <!-- ================= SIDEBAR ================= -->
 
         <div class="col-md-3 col-lg-2 sidebar">
 
@@ -84,7 +104,8 @@
                 Appointments
             </a>
 
-            <a href="{% url 'Doctor:PregnancyRecords' %}" class="active">
+            <a href="{% url 'Doctor:PregnancyRecords' %}"
+               class="active">
                 Pregnancy Records
             </a>
 
@@ -113,18 +134,194 @@
         </div>
 
 
-        <!-- Content -->
+        <!-- ================= CONTENT ================= -->
 
         <div class="col-md-9 col-lg-10 content">
 
             <h2>Pregnancy Records</h2>
 
             <p class="text-muted">
-                Monitor pregnancy progress of your patients.
+                Add and monitor pregnancy progress of your patients.
             </p>
 
 
+            <!-- ================= ADD PREGNANCY RECORD ================= -->
+
             <div class="card p-4 mt-4">
+
+                <h4 class="mb-4">
+                    Add Pregnancy Record
+                </h4>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- Mother Name -->
+
+                    <div class="mb-3">
+
+                        <label for="mother"
+                               class="form-label">
+                            Mother Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="mother"
+                            id="mother"
+                            class="form-control"
+                            placeholder="Enter Mother Name"
+                            required>
+
+                    </div>
+
+
+                    <!-- Dates -->
+
+                    <div class="row">
+
+                        <!-- Last Period -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="last_period_date"
+                                   class="form-label">
+                                Last Period Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="last_period_date"
+                                id="last_period_date"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <!-- Expected Delivery -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="expected_delivery_date"
+                                   class="form-label">
+                                Expected Delivery Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="expected_delivery_date"
+                                id="expected_delivery_date"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Week and Weight -->
+
+                    <div class="row">
+
+                        <!-- Current Week -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="current_week"
+                                   class="form-label">
+                                Current Week
+                            </label>
+
+                            <input
+                                type="number"
+                                name="current_week"
+                                id="current_week"
+                                class="form-control"
+                                min="1"
+                                max="42"
+                                placeholder="Example: 30"
+                                required>
+
+                        </div>
+
+
+                        <!-- Weight -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="weight"
+                                   class="form-label">
+                                Weight (kg)
+                            </label>
+
+                            <input
+                                type="number"
+                                name="weight"
+                                id="weight"
+                                class="form-control"
+                                step="0.01"
+                                min="0"
+                                placeholder="Example: 60.5"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Symptoms -->
+
+                    <div class="mb-3">
+
+                        <label for="symptoms"
+                               class="form-label">
+                            Symptoms
+                        </label>
+
+                        <textarea
+                            name="symptoms"
+                            id="symptoms"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Enter pregnancy symptoms"></textarea>
+
+                    </div>
+
+
+                    <!-- Save Button -->
+
+                    <button type="submit"
+                            class="btn btn-save">
+
+                        Save Pregnancy Record
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================= PREGNANCY RECORD TABLE ================= -->
+
+            <div class="card p-4 mt-4">
+
+                <div class="d-flex justify-content-between
+                            align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Pregnancy Records
+                    </h4>
+
+                    <span class="badge bg-primary">
+                        {{ pregnancy_records|length }} Records
+                    </span>
+
+                </div>
+
 
                 <div class="table-responsive">
 
@@ -133,13 +330,21 @@
                         <thead>
 
                             <tr>
+
                                 <th>#</th>
+
                                 <th>Patient</th>
+
                                 <th>Last Period</th>
+
                                 <th>Expected Delivery</th>
+
                                 <th>Current Week</th>
+
                                 <th>Weight</th>
+
                                 <th>Symptoms</th>
+
                             </tr>
 
                         </thead>
@@ -151,41 +356,84 @@
 
                             <tr>
 
+                                <!-- Number -->
+
                                 <td>
                                     {{ forloop.counter }}
                                 </td>
 
+
+                                <!-- Mother -->
+
                                 <td>
+
                                     <strong>
                                         {{ record.user }}
                                     </strong>
+
                                 </td>
 
-                                <td>
-                                    {{ record.last_period_date }}
-                                </td>
+
+                                <!-- Last Period -->
 
                                 <td>
-                                    {{ record.expected_delivery_date }}
+                                    {{ record.last_period_date|default:"-" }}
                                 </td>
+
+
+                                <!-- Expected Delivery -->
+
+                                <td>
+                                    {{ record.expected_delivery_date|default:"-" }}
+                                </td>
+
+
+                                <!-- Current Week -->
 
                                 <td>
 
                                     <span class="badge bg-primary">
+
                                         Week {{ record.current_week }}
+
                                     </span>
 
                                 </td>
 
-                                <td>
-                                    {{ record.weight|default:"-" }} kg
-                                </td>
+
+                                <!-- Weight -->
 
                                 <td>
-                                    {{ record.symptoms|default:"No symptoms reported" }}
+
+                                    {% if record.weight %}
+                                        {{ record.weight }} kg
+                                    {% else %}
+                                        -
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Symptoms -->
+
+                                <td>
+
+                                    {% if record.symptoms %}
+
+                                        {{ record.symptoms }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            No symptoms reported
+                                        </span>
+
+                                    {% endif %}
+
                                 </td>
 
                             </tr>
+
 
                         {% empty %}
 
@@ -217,4 +465,5 @@
 </div>
 
 </body>
+
 </html>
