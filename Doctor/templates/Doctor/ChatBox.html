@@ -111,41 +111,41 @@
 
             <h3>Doctor Panel</h3>
 
-            <a href="{% url 'DoctorDashboard' %}">
+            <a href="{% url 'Doctor:DoctorDashboard' %}">
                 Dashboard
             </a>
 
-            <a href="{% url 'DoctorPatients' %}">
+            <a href="{% url 'Doctor:Patients' %}">
                 Patients
             </a>
 
-            <a href="{% url 'DoctorAppointments' %}">
+            <a href="{% url 'Doctor:Appointments' %}">
                 Appointments
             </a>
 
-            <a href="{% url 'PregnancyRecords' %}">
+            <a href="{% url 'Doctor:PregnancyRecords' %}">
                 Pregnancy Records
             </a>
 
-            <a href="{% url 'BabyRecords' %}">
+            <a href="{% url 'Doctor:BabyRecords' %}">
                 Baby Records
             </a>
 
-            <a href="{% url 'Prescriptions' %}">
+            <a href="{% url 'Doctor:Prescriptions' %}">
                 Prescriptions
             </a>
 
-            <a href="{% url 'Messages' %}">
+            <a href="{% url 'Doctor:Messages' %}">
                 Messages
             </a>
 
-            <a href="{% url 'ChatBox' %}" class="active">
+            <a href="{% url 'Doctor:ChatBox' %}" class="active">
                 AI Chatbox
             </a>
 
             <hr>
 
-            <a href="{% url 'Login' %}">
+            <a href="{% url 'Doctor:Logout' %}">
                 Logout
             </a>
 
@@ -268,7 +268,7 @@ document.getElementById("chatForm").addEventListener("submit", function(event) {
 
     // Send request to Django
 
-    fetch("{% url 'DoctorAIChatbox' %}", {
+    fetch("{% url 'Doctor:ChatBox' %}", {
 
         method: "POST",
 

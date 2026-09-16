@@ -8,9 +8,10 @@ urlpatterns = [
     path('BabyGrowth/', views.BabyGrowth, name='BabyGrowth'),
     path('Nutrition/', views.Nutrition, name='Nutrition'),
     path('Appointments/', views.Appointments, name='Appointments'),
-    # path('Messages/', views.Messages, name='Messages'),
+    path('Messages/', views.Messages, name='Messages'),
     path('Profile/', views.Profile, name='Profile'),
     path('MyProfile/', views.MyProfile, name='MyProfile'),
     path('EditProfile/', views.EditProfile, name='EditProfile'),
     path('ChangePassword/', views.ChangePassword, name='ChangePassword'),
+    path('AIPrediction/',views.AIPrediction,name='AIPrediction'),
 ]

@@ -75,41 +75,41 @@
 
             <h3>Doctor Panel</h3>
 
-            <a href="{% url 'DoctorDashboard' %}">
+            <a href="{% url 'Doctor:DoctorDashboard' %}">
                 Dashboard
             </a>
 
-            <a href="{% url 'DoctorPatients' %}">
+            <a href="{% url 'Doctor:Patients' %}">
                 Patients
             </a>
 
-            <a href="{% url 'DoctorAppointments' %}">
+            <a href="{% url 'Doctor:Appointments' %}">
                 Appointments
             </a>
 
-            <a href="{% url 'PregnancyRecords' %}">
+            <a href="{% url 'Doctor:PregnancyRecords' %}">
                 Pregnancy Records
             </a>
 
-            <a href="{% url 'BabyRecords' %}">
+            <a href="{% url 'Doctor:BabyRecords' %}">
                 Baby Records
             </a>
 
-            <a href="{% url 'Prescriptions' %}">
+            <a href="{% url 'Doctor:Prescriptions' %}">
                 Prescriptions
             </a>
 
-            <a href="{% url 'DoctorMessages' %}" class="active">
+            <a href="{% url 'Doctor:Messages' %}" class="active">
                 Messages
             </a>
 
-            <a href="{% url 'DoctorAIChatbox' %}">
+            <a href="{% url 'Doctor:ChatBox' %}">
                 AI Chatbox
             </a>
 
             <hr>
 
-            <a href="{% url 'Login' %}">
+            <a href="{% url 'Doctor:Logout' %}">
                 Logout
             </a>
 
