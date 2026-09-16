@@ -1,59 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Manage Medicines</title>
-        <style>
-            *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-            body{background:#f4f6f9;display:flex;justify-content:center;align-items:center;height:100vh;}
-            form{background:#fff;padding:30px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
-            table{width:500px;border-collapse:collapse;}
-            td{padding:12px;}
-            td:first-child{font-weight:bold;width:150px;}
-            input,textarea
-            {
-                width:100%;
-                padding:10px;
-                border:1px solid #ccc;
-                border-radius:5px;
-            }
-            textarea{height:100px;resize:none;}
-            input[type=submit]{background:#28a745;color:#fff;border:none;cursor:pointer;}
-            input[type=reset]{background:#dc3545;color:#fff;border:none;cursor:pointer;}
-            h2{text-align:center;margin-bottom:20px;}
-        </style>
-    </head>
-    <body>
-        <form action="" method="post">
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h2>Manage Medicines</h2>
+
+    <div class="card shadow-sm p-4 mt-4">
+
+        <form method="POST">
+
             {% csrf_token %}
-            <h2>Manage Medicines</h2>
-            <table>
+
+            <input
+                type="text"
+                name="name"
+                class="form-control mb-3"
+                placeholder="Medicine name"
+                required
+            >
+
+            <input
+                type="text"
+                name="dosage"
+                class="form-control mb-3"
+                placeholder="Dosage"
+            >
+
+            <textarea
+                name="purpose"
+                class="form-control mb-3"
+                placeholder="Purpose"
+            ></textarea>
+
+            <textarea
+                name="warning"
+                class="form-control mb-3"
+                placeholder="Warning"
+            ></textarea>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Add Medicine
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card shadow-sm mt-4">
+
+        <table class="table table-bordered">
+
+            <thead>
                 <tr>
-                    <td>Medicine Name</td>
-                    <td><input type="text" name="txt_medicine"></td>
+                    <th>Name</th>
+                    <th>Dosage</th>
+                    <th>Purpose</th>
+                    <th>Warning</th>
                 </tr>
+            </thead>
+
+            <tbody>
+
+                {% for medicine in medicines %}
+
                 <tr>
-                    <td>Dosage</td>
-                    <td><input type="text" name="txt_dosage"></td>
+                    <td>{{ medicine.name }}</td>
+                    <td>{{ medicine.dosage }}</td>
+                    <td>{{ medicine.purpose }}</td>
+                    <td>{{ medicine.warning }}</td>
                 </tr>
+
+                {% empty %}
+
                 <tr>
-                    <td>Description</td>
-                    <td><textarea name="txt_description"></textarea></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                        <input type="submit" value="Edit">
-                        <input type="reset" value="Delete">
+                    <td colspan="4" class="text-center">
+                        No medicines found.
                     </td>
                 </tr>
-            </table>
-        </form> 
-    </body>
-</html>
-{% if msg %}
-<script>
-alert("{{msg}}");
-window.location="{% url 'Administrator:ManageMedicines' %}";
-</script>
-{% endif %}
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

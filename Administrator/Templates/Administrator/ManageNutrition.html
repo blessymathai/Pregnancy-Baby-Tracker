@@ -1,71 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Manage Nutrition</title>
-        <style>
-            *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-            body{background:#f4f6f9;display:flex;justify-content:center;align-items:center;height:100vh;}
-            form{background:#fff;padding:30px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
-            table{width:500px;border-collapse:collapse;}
-            td{padding:12px;}
-            td:first-child{font-weight:bold;width:150px;}
-            input,textarea
-            {
-                width:100%;
-                padding:10px;
-                border:1px solid #ccc;
-                border-radius:5px;
-            }
-            textarea{height:100px;resize:none;}
-            input[type=submit]
-            {
-                background:#28a745;
-                color:#fff;
-                border:none;
-                cursor:pointer;
-            }
-            input[type=reset]
-            {
-                background:#dc3545;
-                color:#fff;
-                border:none;
-                cursor:pointer;
-            }
-            h2{text-align:center;margin-bottom:20px;}
-        </style>
-    </head>
-    <body>
-        <form action="" method="post">
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h2>Manage Nutrition</h2>
+
+    <div class="card shadow-sm p-4 mt-4">
+
+        <form method="POST">
+
             {% csrf_token %}
-            <h2>Manage Nutrition</h2>
-            <table>
+
+            <input
+                type="text"
+                name="name"
+                class="form-control mb-3"
+                placeholder="Food name"
+                required
+            >
+
+            <input
+                type="text"
+                name="category"
+                class="form-control mb-3"
+                placeholder="Category"
+            >
+
+            <input
+                type="number"
+                step="any"
+                name="calories"
+                class="form-control mb-3"
+                placeholder="Calories"
+            >
+
+            <input
+                type="number"
+                step="any"
+                name="protein"
+                class="form-control mb-3"
+                placeholder="Protein"
+            >
+
+            <input
+                type="number"
+                step="any"
+                name="iron"
+                class="form-control mb-3"
+                placeholder="Iron"
+            >
+
+            <input
+                type="number"
+                step="any"
+                name="calcium"
+                class="form-control mb-3"
+                placeholder="Calcium"
+            >
+
+            <input
+                type="number"
+                step="any"
+                name="fiber"
+                class="form-control mb-3"
+                placeholder="Fiber"
+            >
+
+            <textarea
+                name="recommendation"
+                class="form-control mb-3"
+                placeholder="Recommendation"
+            ></textarea>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Add Nutrition
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card shadow-sm mt-4">
+
+        <table class="table table-bordered">
+
+            <thead>
                 <tr>
-                    <td>Food Name</td>
-                    <td><input type="text" name="txt_food"></td>
+                    <th>Food</th>
+                    <th>Category</th>
+                    <th>Calories</th>
+                    <th>Protein</th>
+                    <th>Iron</th>
+                    <th>Calcium</th>
+                    <th>Fiber</th>
                 </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in nutrition %}
+
                 <tr>
-                    <td>Category</td>
-                    <td><input type="text" name="txt_category"></td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.calories }}</td>
+                    <td>{{ item.protein }}</td>
+                    <td>{{ item.iron }}</td>
+                    <td>{{ item.calcium }}</td>
+                    <td>{{ item.fiber }}</td>
                 </tr>
+
+                {% empty %}
+
                 <tr>
-                    <td>Benefits</td>
-                    <td><textarea name="txt_benefits"></textarea></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                        <input type="submit" value="Edit">
-                        <input type="reset" value="Delete">
+                    <td colspan="7" class="text-center">
+                        No nutrition data found.
                     </td>
                 </tr>
-            </table>
-        </form>
-    </body>
-</html>
-{% if msg %}
-<script>
-alert("{{msg}}");
-window.location="{% url 'Administrator:ManageNutrition' %}";
-</script>
-{% endif %}
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

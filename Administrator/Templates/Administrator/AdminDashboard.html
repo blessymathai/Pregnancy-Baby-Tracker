@@ -312,21 +312,29 @@
                     <i class="bi bi-person-badge-fill"></i>
                     <span>Doctors</span>
                 </a>
+                <a href="{% url 'Administrator:ManageMedicines' %}">
+                    <i class="bi bi-calendar-heart-fill"></i>
+                    <span>Medicines</span>
+                </a>
                 <a href="{% url 'Administrator:ManageMilestones' %}">
                     <i class="bi bi-calendar-heart-fill"></i>
                     <span>Milestones</span>
                 </a>
-                <a href="{% url 'Administrator:UploadDataset' %}">
-                    <i class="bi bi-database-fill"></i>
-                    <span>Dataset</span>
+                <a href="{% url 'Administrator:ManageNutrition' %}">
+                    <i class="bi bi-egg-fill"></i>
+                    <span>Manage Nutrition</span>
+                </a>
+                <a href="{% url 'Administrator:Reports' %}">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    <span>Reports</span>
                 </a>
                 <a href="{% url 'Administrator:ChatBox' %}">
                     <i class="bi bi-chat-fill"></i>
                     <span>ChatBox</span>
                 </a>
-                <a href="{% url 'Administrator:Reports' %}">
-                    <i class="bi bi-bar-chart-fill"></i>
-                    <span>Reports</span>
+                <a href="{% url 'Administrator:UploadDataset' %}">
+                    <i class="bi bi-database-fill"></i>
+                    <span>Dataset</span>
                 </a>
                 <a href="{% url 'Guest:HomePage' %}">
                     <i class="bi bi-house-fill"></i>

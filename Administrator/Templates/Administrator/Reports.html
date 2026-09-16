@@ -1,94 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reports</title>
-            <style>
-                *{
-                    margin:0;
-                    padding:0;
-                    box-sizing:border-box;
-                    font-family:Arial,sans-serif;
-                }
-                body
-                {
-                    background:#f4f6f9;
-                    display:flex;
-                    justify-content:center;
-                    align-items:center;
-                    height:100vh;
-                }
-                .container
-                {
-                    width:700px;
-                    background:#fff;
-                    padding:30px;
-                    border-radius:10px;
-                    box-shadow:0 4px 10px rgba(0,0,0,.2);
-                }
-                h2
-                {
-                    text-align:center;
-                    margin-bottom:20px;
-                }
-                table
-                {
-                    width:100%;
-                    border-collapse:collapse;
-                }
-                th,td
-                {
-                    border:1px solid #ddd;
-                    padding:10px;
-                    text-align:center;
-                }
-                th
-                {
-                    background:#007bff;
-                    color:white;
-                }
-                tr:nth-child(even)
-                {
-                    background:#f2f2f2;
-                }
-            </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Reports</h2>
-            <table>
-                <tr>
-                    <td>Sl No</td>
-                    <td>Report Name</td>
-                    <td>Status</td>
-                </tr>
-                <!-- <tr>
-                    <td>1</td>
-                    <td>User Report</td>
-                    <td>Available</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Doctor Report</td>
-                    <td>Available</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Pregnancy Report</td>
-                    <td>Available</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Nutrition Report</td>
-                    <td>Available</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Medicine Report</td>
-                    <td>Available</td>
-                </tr> -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h2>Medical Reports</h2>
+
+    <div class="card shadow-sm mt-4">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered">
+
+                <thead>
+
+                    <tr>
+                        <th>Patient</th>
+                        <th>Report</th>
+                        <th>Doctor</th>
+                        <th>Uploaded</th>
+                        <th>View</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for report in reports %}
+
+                    <tr>
+
+                        <td>
+                            {{ report.user.name }}
+                        </td>
+
+                        <td>
+                            {{ report.title }}
+                        </td>
+
+                        <td>
+
+                            {% if report.doctor %}
+                                Dr. {{ report.doctor.doctor_name }}
+                            {% else %}
+                                Not Assigned
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ report.uploaded_at }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ report.report_file.url }}"
+                                target="_blank"
+                                class="btn btn-primary btn-sm"
+                            >
+                                View Report
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center"
+                        >
+                            No reports found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
             </table>
+
         </div>
-    </body>
-</html>
+
+    </div>
+
+</div>
+
+{% endblock %}
