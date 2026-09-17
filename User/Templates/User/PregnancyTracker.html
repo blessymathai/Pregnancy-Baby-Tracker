@@ -1,198 +1,485 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pregnancy Tracker</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-            }
-            body 
-            {
-                background-color: #f5faff;
-                padding: 40px;
-            }
-            .container 
-            {
-                max-width: 800px;
-                margin: auto;
-                background-color: white;
-                padding: 30px;
-                border-radius: 12px;
-                border: 2px solid #050505;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            }
-            h2 
-            {
-                text-align: center;
-                color: #000;
-                margin-bottom: 25px;
-            }
-            /* Pregnancy Progress */
-            .progress 
-            {
-                width: 100%;
-                height: 28px;
-                background-color: #e8e8e8;
-                border-radius: 15px;
-                overflow: hidden;
-                margin-bottom: 25px;
-            }
-            .progress-bar 
-            {
-                width: 65%;
-                height: 100%;
-                background-color: #f3a6c2;
-                color: #000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-            }
-            /* Milestone */
-            .alert 
-            {
-                padding: 18px;
-                margin-bottom: 25px;
-                border-radius: 8px;
-                background-color: #dff5fc;
-                border: 1px solid #0a0a0a;
-                color: #000;
-            }
-            .alert strong 
-            {
-                color: #d45b83;
-            }
-            /* Form */
-            .form-group 
-            {
-                margin-bottom: 20px;
-            }
-            label 
-            {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #000;
-            }
-            textarea,
-            select 
-            {
-                width: 100%;
-                padding: 12px;
-                border: 1px solid #0a0a0a;
-                border-radius: 6px;
-                font-size: 15px;
-            }
-            textarea 
-            {
-                resize: vertical;
-            }
-            textarea:focus,
-            select:focus 
-            {
-                outline: none;
-                border-color: #f3a6c2;
-            }
-            /* Button */
-            .btn 
-            {
-                background-color: #9ddcf5;
-                color: #000;
-                border: none;
-                padding: 12px 20px;
-                border-radius: 6px;
-                font-size: 15px;
-                font-weight: bold;
-                cursor: pointer;
-            }
-            .btn:hover 
-            {
-                background-color: #f3a6c2;
-            }
-            /* Mobile */
-            @media (max-width: 600px) 
-            {
-                body 
-                {
-                    padding: 20px;
-                }
-                .container 
-                {
-                    padding: 20px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-    <div class="container">
-        <h2>🤰 Pregnancy Tracker</h2>
-        <!-- Pregnancy Week -->
-        <div class="form-group">
-            <label>Current Pregnancy Week</label>
-            <input type="number"
-                   id="currentWeek"
-                   min="0"
-                   max="40"
-                   placeholder="Enter current week"
-                   oninput="updateProgress()">
-        </div>
-        <!-- Pregnancy Progress -->
-        <div class="progress">
-            <div class="progress-bar" id="progressBar">
-                0 / 40 Weeks
-            </div>
-        </div>
-        <!-- Weekly Milestone -->
-        <div class="alert">
-            <strong>Week Milestone:</strong>
-            <input type="text"
-                   id="milestone"
-                   placeholder="Enter this week's milestone">
-        </div>
-        <!-- Symptoms -->
-        <div class="form-group">
-            <label>Today's Symptoms</label>
-            <textarea
-                rows="3"
-                placeholder="Enter symptoms such as back pain, nausea, fatigue..."></textarea>
-        </div>
-        <!-- Mood -->
-        <div class="form-group">
-            <label>Mood / Emotions</label>
-            <select>
-                <option value="">Select Mood</option>
-                <option>Happy</option>
-                <option>Anxious</option>
-                <option>Tired</option>
-                <option>Excited</option>
-                <option>Calm</option>
-            </select>
-        </div>
-        <button type="button" class="btn">
-            Save Daily Record
-        </button>
-    </div>
-    <script>
-        function updateProgress() 
-        {
-            let week = document.getElementById("currentWeek").value;
-            if (week < 1) 
-            {
-                week = 1;
-            }
-            if (week > 40) 
-            {
-                week = 40;
-            }
-            let percentage = (week / 40) * 100;
-            document.getElementById("progressBar").style.width =percentage + "%";
-            document.getElementById("progressBar").innerHTML =week + " / 40 Weeks";
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pregnancy Tracker</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
         }
-        </script>
-    </body>
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f8fb;
+            font-family: Arial, sans-serif;
+            color: #000;
+        }
+
+        .tracker-card {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border: 2px solid #000;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        h4 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-control,
+        .form-select {
+            border: 1px solid #000;
+            border-radius: 6px;
+            padding: 11px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #000;
+            box-shadow: none;
+        }
+
+        /* Progress */
+
+        .progress-container {
+            margin: 25px 0;
+        }
+
+        .progress {
+            height: 30px;
+            border: 1px solid #000;
+            border-radius: 15px;
+            background: #e8e8e8;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #9ddcf5;
+            color: #000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Milestone */
+
+        .milestone-box {
+            background: #dff5fc;
+            border: 1px solid #000;
+            border-radius: 8px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+
+        .milestone-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Buttons */
+
+        .btn-save {
+            background: #9ddcf5;
+            color: #000;
+            border: 1px solid #000;
+            font-weight: bold;
+            padding: 11px 20px;
+            border-radius: 6px;
+        }
+
+        .btn-save:hover {
+            background: #78c9e9;
+            color: #000;
+        }
+
+        .btn-back {
+            background: white;
+            color: #000;
+            border: 1px solid #000;
+            font-weight: bold;
+            padding: 11px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: #eee;
+            color: #000;
+        }
+
+        /* Weekly Records */
+
+        .weekly-record {
+            border: 1px solid #000;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+
+        .weekly-record strong {
+            font-size: 17px;
+        }
+
+        .empty-record {
+            padding: 15px;
+            border: 1px solid #000;
+            border-radius: 8px;
+            background: #f8f8f8;
+        }
+
+        .alert {
+            border: 1px solid #000;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .tracker-card {
+                padding: 20px;
+                margin: 10px auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="tracker-card">
+
+    <h2>🤰 Pregnancy Tracker</h2>
+
+    <hr>
+
+    <!-- ================= PREGNANCY DETAILS ================= -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label>Last Period Date</label>
+
+            <input
+                type="date"
+                name="last_period_date"
+                class="form-control"
+                value="{{ pregnancy.last_period_date|date:'Y-m-d' }}"
+                required>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Current Pregnancy Week</label>
+
+            <input
+                type="number"
+                name="current_week"
+                id="currentWeek"
+                class="form-control"
+                value="{{ pregnancy.current_week }}"
+                min="1"
+                max="40"
+                required
+                oninput="updateProgress()">
+
+        </div>
+
+
+        <!-- ================= PROGRESS BAR ================= -->
+
+        <div class="progress-container">
+
+            <label>Pregnancy Progress</label>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                    role="progressbar">
+
+                    0 / 40 Weeks
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label>Current Month</label>
+
+            <input
+                type="number"
+                name="current_month"
+                class="form-control"
+                value="{{ pregnancy.current_month }}"
+                min="1"
+                max="10"
+                required>
+
+        </div>
+
+
+        <!-- ================= MILESTONE ================= -->
+
+        <div class="milestone-box">
+
+            <strong>
+                📌 Weekly Milestone
+            </strong>
+
+            {% if pregnancy.current_week %}
+
+                {% for milestone in milestones %}
+
+                    {% if milestone.week == pregnancy.current_week %}
+
+                        <div>
+                            <strong>{{ milestone.title }}</strong>
+                        </div>
+
+                        <p class="mb-1">
+                            {{ milestone.description }}
+                        </p>
+
+                        {% if milestone.tips %}
+                            <small>
+                                <b>Tips:</b> {{ milestone.tips }}
+                            </small>
+                        {% endif %}
+
+                    {% endif %}
+
+                {% empty %}
+
+                    <p class="mb-0">
+                        No milestone available for this week.
+                    </p>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="mb-0">
+                    Enter your current pregnancy week to view the milestone.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================= DAILY SYMPTOMS ================= -->
+
+        <div class="mb-3">
+
+            <label>Today's Symptoms</label>
+
+            <textarea
+                name="symptoms"
+                rows="3"
+                class="form-control"
+                placeholder="Enter symptoms such as back pain, nausea, fatigue...">{{ daily_record.symptoms|default:'' }}</textarea>
+
+        </div>
+
+
+        <!-- ================= MOOD ================= -->
+
+        <div class="mb-3">
+
+            <label>Mood / Emotions</label>
+
+            <select
+                name="mood"
+                class="form-select">
+
+                <option value="">
+                    Select Mood
+                </option>
+
+                <option value="Happy"
+                    {% if daily_record.mood == "Happy" %}selected{% endif %}>
+                    Happy
+                </option>
+
+                <option value="Anxious"
+                    {% if daily_record.mood == "Anxious" %}selected{% endif %}>
+                    Anxious
+                </option>
+
+                <option value="Tired"
+                    {% if daily_record.mood == "Tired" %}selected{% endif %}>
+                    Tired
+                </option>
+
+                <option value="Excited"
+                    {% if daily_record.mood == "Excited" %}selected{% endif %}>
+                    Excited
+                </option>
+
+                <option value="Calm"
+                    {% if daily_record.mood == "Calm" %}selected{% endif %}>
+                    Calm
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================= SAVE ================= -->
+
+        <div class="d-flex gap-2">
+
+            <button
+                type="submit"
+                class="btn btn-save">
+
+                💾 Save Pregnancy Details
+
+            </button>
+
+            <a
+                href="{% url 'User:UserDashboard' %}"
+                class="btn-back">
+
+                ← Back
+
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <hr>
+
+
+    <!-- ================= WEEKLY RECORDS ================= -->
+
+    <h4>
+        📅 Weekly Records
+    </h4>
+
+
+    {% for record in weekly_records %}
+
+        <div class="weekly-record">
+
+            <strong>
+                Week {{ record.week }}
+            </strong>
+
+            {% if record.notes %}
+
+                <p class="mb-0 mt-2">
+                    {{ record.notes }}
+                </p>
+
+            {% else %}
+
+                <p class="mb-0 mt-2">
+                    No notes available.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-record">
+
+            No weekly records available.
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+function updateProgress() {
+
+    let week =
+        parseInt(document.getElementById("currentWeek").value) || 0;
+
+    if (week < 0) {
+        week = 0;
+    }
+
+    if (week > 40) {
+        week = 40;
+    }
+
+    let percentage =
+        (week / 40) * 100;
+
+    document.getElementById("progressBar").style.width =
+        percentage + "%";
+
+    document.getElementById("progressBar").innerHTML =
+        week + " / 40 Weeks";
+}
+
+
+/* Load progress when page opens */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    updateProgress();
+
+});
+
+</script>
+
+
+</body>
 </html>

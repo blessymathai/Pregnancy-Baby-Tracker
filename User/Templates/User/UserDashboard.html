@@ -1,248 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Dashboard - Pregnancy & Baby Tracker</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-            }
-            body 
-            {
-                background-color: #f5faff;
-                color: #222;
-            }
-            /* Navbar */
-            .navbar 
-            {
-                background-color: #f3a6c2;
-                color: white;
-                padding: 18px 35px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 4px solid #f3a6c2;
-            }
-            .navbar h2 
-            {
-                font-size: 24px;
-                color: white;
-            }
-            .navbar a 
-            {
-                color: white;
-                text-decoration: none;
-                margin-left: 20px;
-                font-size: 15px;
-            }
-            .navbar a:hover 
-            {
-                color: #9ddcf5;
-            }
-            /* Welcome */
-            .welcome
-            {
-                padding: 30px 40px 15px;
-            }
-            .welcome h1 
-            {
-                color: #000000;
-                margin-bottom: 8px;
-            }
-            .welcome p 
-            {
-                color: #555;
-            }
-            /* Main Container */
-            .container 
-            {
-                padding: 20px 40px;
-            }
-            /* Cards */
-            .cards 
-            {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-            .card 
-            {
-                background-color: white;
-                padding: 25px;
-                border-radius: 12px;
-                border: 2px solid #b9e7f8;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-                transition: 0.3s;
-            }
-            .card:hover 
-            {
-                transform: translateY(-5px);
-                border-color: #f3a6c2;
-            }
-            .card h3 
-            {
-                color: #000000;
-                margin-bottom: 12px;
-            }
-            .card p 
-            {
-                color: #666;
-                margin-bottom: 15px;
-                line-height: 1.5;
-            }
-            /* Button */
-            .btn 
-            {
-                display: inline-block;
-                background-color: #9ddcf5;
-                color: #000000;
-                padding: 9px 16px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            .btn:hover 
-            {
-                background-color: #f3a6c2;
-                color: #000000;
-            }
-            /* Quick Section */
-            .quick-section 
-            {
-                margin-top: 30px;
-                background-color: white;
-                padding: 25px;
-                border-radius: 12px;
-                border: 2px solid #f3a6c2;
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            }
-            .quick-section h2 
-            {
-                margin-bottom: 20px;
-                color: #000000;
-            }
-            /* Quick Links */
-            .quick-links 
-            {
-                display: flex;
-                gap: 15px;
-                flex-wrap: wrap;
-            }
-            .quick-links a 
-            {
-                background-color: #dff5fc;
-                color: #000000;
-                padding: 12px 18px;
-                border-radius: 7px;
-                text-decoration: none;
-                border: 1px solid #9ddcf5;
-            }
-            .quick-links a:hover 
-            {
-                background-color: #f3a6c2;
-                border-color: #f3a6c2;
-            }
-            /* Mobile */
-            @media (max-width: 900px) 
-            {
-                .cards 
-                {
-                    grid-template-columns: repeat(2, 1fr);
-                }
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>User Dashboard - Pregnancy & Baby Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5faff;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background-color: #f3a6c2;
+            color: white;
+            padding: 18px 35px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 3px solid #000;
+        }
+
+        .navbar h2 {
+            font-size: 24px;
+            color: white;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            color: #000;
+        }
+
+
+        /* ================= WELCOME ================= */
+
+        .welcome {
+            padding: 30px 40px 15px;
+        }
+
+        .welcome h1 {
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #555;
+        }
+
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            padding: 20px 40px;
+        }
+
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            border: 2px solid #b9e7f8;
+
+            box-shadow:
+                0 4px 10px rgba(0, 0, 0, 0.08);
+
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #f3a6c2;
+        }
+
+        .card h3 {
+            color: #000;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+
+        /* ================= BUTTON ================= */
+
+        .btn {
+            display: inline-block;
+
+            background-color: #9ddcf5;
+
+            color: #000;
+
+            padding: 9px 16px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            border: 1px solid #000;
+        }
+
+        .btn:hover {
+            background-color: #f3a6c2;
+            color: #000;
+        }
+
+
+        /* ================= QUICK ACCESS ================= */
+
+        .quick-section {
+            margin-top: 30px;
+
+            background-color: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            border: 2px solid #f3a6c2;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .quick-section h2 {
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-links a {
+            background-color: #dff5fc;
+
+            color: #000;
+
+            padding: 12px 18px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            border: 1px solid #9ddcf5;
+
+            font-weight: bold;
+        }
+
+        .quick-links a:hover {
+            background-color: #f3a6c2;
+            border-color: #000;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
             }
-            @media (max-width: 600px) 
-            {
-                .cards 
-                {
-                    grid-template-columns: 1fr;
-                }
-                .navbar
-                {
-                    flex-direction: column;
-                    gap: 10px;
-                    text-align: center;
-                }
-                .container,
-                .welcome 
-                {
-                    padding-left: 20px;
-                    padding-right: 20px;
-                }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .cards {
+                grid-template-columns: 1fr;
             }
-        </style>
-    </head>
-    <body>
-        <!-- Navbar -->
-        <div class="navbar">
-            <h2>Pregnancy & Baby Tracker</h2>
-            <div>
-                <a href="{% url 'Guest:HomePage' %}">Home</a>
-                <a href="{% url 'User:Profile' %}">Profile</a>
-                <a href="{% url 'Guest:HomePage' %}">Logout</a>
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .navbar-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container,
+            .welcome {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================= -->
+<!-- NAVBAR -->
+<!-- ================================================= -->
+
+<div class="navbar">
+
+    <h2>
+        Pregnancy & Baby Tracker
+    </h2>
+
+    <div class="navbar-links">
+
+        <a href="{% url 'Guest:HomePage' %}">
+            Home
+        </a>
+
+        <a href="{% url 'User:Profile' %}">
+            Profile
+        </a>
+
+        <a href="{% url 'Guest:HomePage' %}">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- WELCOME -->
+<!-- ================================================= -->
+
+<div class="welcome">
+
+    <h1>
+        Welcome,
+        {{ request.session.user_name|default:"User" }} 👋
+    </h1>
+
+    <p>
+        Manage your pregnancy, health and baby information easily.
+    </p>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- MAIN -->
+<!-- ================================================= -->
+
+<div class="container">
+
+
+    <!-- ================================================= -->
+    <!-- DASHBOARD CARDS -->
+    <!-- ================================================= -->
+
+    <div class="cards">
+
+         <!-- PROFILE -->
+
+            <div class="card">
+
+                <h3>
+                    👤 Profile
+                </h3>
+
+                <p>
+                    View your profile information,
+                    personal details and profile photo.
+                </p>
+
+                <a
+                    href="{% url 'User:Profile' %}"
+                    class="btn">
+
+                    View Profile
+
+                </a>
+
             </div>
-        </div>
-        <!-- Welcome -->
-        <div class="welcome">
-            <h1>Welcome, User👋</h1>
+            
+            <!-- TRACKER -->
+
+        <div class="card">
+
+            <h3>
+                📊 Pregnancy Tracker
+            </h3>
+
             <p>
-                Manage your pregnancy, health and baby information easily.
+                Track pregnancy weeks, milestones,
+                symptoms and daily pregnancy records.
             </p>
+
+            <a
+                href="{% url 'User:PregnancyTracker' %}"
+                class="btn">
+
+                View Tracker
+
+            </a>
+
         </div>
-        <!-- Dashboard Cards -->
-        <div class="container">
-            <div class="cards">
-                <!-- Pregnancy -->
-                <div class="card">
-                    <h3>🤰 Pregnancy Tracker</h3>
-                    <p>
-                        Track pregnancy weeks, milestones and important updates.
-                    </p>
-                    <a href="{% url 'User:PregnancyTracker' %}" class="btn">View Tracker</a>
-                </div>
-                <!-- Baby -->
-                <div class="card">
-                    <h3>👶 Baby Growth</h3>
-                    <p>
-                        Monitor your baby's growth and development.
-                    </p>
-                    <a href="{% url 'User:BabyGrowth' %}" class="btn">View Baby</a>
-                </div>
-                <!-- Nutrition -->
-                <div class="card">
-                    <h3>🥗 Nutrition</h3>
-                    <p>
-                        Get healthy food and nutrition recommendations.
-                    </p>
-                    <a href="{% url 'User:Nutrition' %}" class="btn">View Nutrition</a>
-                </div>
-                <!-- Appointment -->
-                <div class="card">
-                    <h3>📅 Appointments</h3>
-                    <p>
-                        Manage doctor appointments and health checkups.
-                    </p>
-                    <a href="{% url 'User:Appointments' %}" class="btn">View Appointments</a>
-                </div>
-            </div>
-            <!-- Quick Links -->
-            <div class="quick-section">
-                <h2>Quick Access</h2>
-                <div class="quick-links">
-                    <a href="{% url 'User:Profile' %}">Profile</a>
-                    <a href="{% url 'User:MyProfile' %}">My Profile</a>
-                    <a href="{% url 'User:PregnancyTracker' %}">Pregnancy Tracker</a>
-                    <a href="{% url 'User:BabyGrowth' %}">Baby Growth</a>
-                    <a href="{% url 'User:Appointments' %}">Appointments</a>
-                    <a href="{% url 'User:Nutrition' %}">Nutrition</a>
-                    <a href="{% url 'User:Messages' %}">Messages</a>
-                </div>
-            </div>
+
+        <!-- PREGNANCY PROFILE -->
+
+        <div class="card">
+
+            <h3>
+                🤰 Pregnancy Profile
+            </h3>
+
+            <p>
+                View and manage your pregnancy information,
+                due date and pregnancy details.
+            </p>
+
+            <a
+                href="{% url 'User:PregnancyProfile' %}"
+                class="btn">
+
+                View Profile
+
+            </a>
+
         </div>
-    </body>
+
+        <!-- BABY GROWTH -->
+
+        <div class="card">
+
+            <h3>
+                👶 Baby Growth
+            </h3>
+
+            <p>
+                Monitor your baby's growth and
+                development information.
+            </p>
+
+            <a
+                href="{% url 'User:BabyGrowth' %}"
+                class="btn">
+
+                View Baby
+
+            </a>
+
+        </div>
+
+
+        <!-- NUTRITION -->
+
+        <div class="card">
+
+            <h3>
+                🥗 Nutrition
+            </h3>
+
+            <p>
+                Get healthy food and nutrition
+                recommendations during pregnancy.
+            </p>
+
+            <a
+                href="{% url 'User:Nutrition' %}"
+                class="btn">
+
+                View Nutrition
+
+            </a>
+
+        </div>
+
+
+        <!-- APPOINTMENTS -->
+
+        <div class="card">
+
+            <h3>
+                📅 Appointments
+            </h3>
+
+            <p>
+                Book and manage appointments
+                with doctors.
+            </p>
+
+            <a
+                href="{% url 'User:Appointments' %}"
+                class="btn">
+
+                Appointments
+
+            </a>
+
+        </div>
+
+
+        <!-- AI PREDICTION -->
+
+        <div class="card">
+
+            <h3>
+                🤖 AI Prediction
+            </h3>
+
+            <p>
+                Enter health information and
+                view AI-based pregnancy risk insights.
+            </p>
+
+            <a
+                href="{% url 'User:AIPrediction' %}"
+                class="btn">
+
+                AI Prediction
+
+            </a>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div class="card">
+
+            <h3>
+                💬 Message Doctor
+            </h3>
+
+            <p>
+                Send and receive messages from
+                your doctor.
+            </p>
+
+            <a
+                href="{% url 'User:Messages' %}"
+                class="btn">
+
+                Open Messages
+
+            </a>
+
+        </div>
+
+
+        <!-- EDIT PROFILE -->
+
+        <div class="card">
+
+            <h3>
+                ✏️ Edit Profile
+            </h3>
+
+            <p>
+                Update your personal information,
+                contact details and profile photo.
+            </p>
+
+            <a
+                href="{% url 'User:EditProfile' %}"
+                class="btn">
+
+                Edit Profile
+
+            </a>
+
+        </div>
+
+
+        <!-- CHANGE PASSWORD -->
+
+        <div class="card">
+
+            <h3>
+                🔐 Change Password
+            </h3>
+
+            <p>
+                Change your account password
+                securely.
+            </p>
+
+            <a
+                href="{% url 'User:ChangePassword' %}"
+                class="btn">
+
+                Change Password
+
+            </a>
+
+        </div>
+
+
+        <!-- MY PROFILE -->
+
+        <div class="card">
+
+            <h3>
+                👤 My Profile
+            </h3>
+
+            <p>
+                View your registered personal
+                information and profile details.
+            </p>
+
+            <a
+                href="{% url 'User:MyProfile' %}"
+                class="btn">
+
+                My Profile
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
 </html>

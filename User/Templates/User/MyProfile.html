@@ -1,87 +1,291 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Profile</title>
-        <style>
-            * {
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #f5faff;
+        }
+
+        .profile-box {
+            max-width: 700px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 25px;
+        }
+
+        /* Profile Image */
+
+        .photo-box {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #9ddcf5;
+            padding: 3px;
+            background-color: white;
+        }
+
+        .photo-name {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td:first-child {
+            width: 35%;
+            font-weight: bold;
+            color: #000;
+        }
+
+        td:last-child {
+            color: #444;
+        }
+
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 25px auto 0;
+            padding: 10px 20px;
+            background-color: #9ddcf5;
+            color: #000;
+            text-decoration: none;
+            border: 1px solid #000;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background-color: #72c9eb;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px;
             }
-            body 
-            {
-                margin: 0;
-                padding: 40px;
-                background-color: #f5faff;
+
+            .profile-box {
+                padding: 20px;
             }
-            .profile-box 
-            {
-                max-width: 700px;
-                margin: auto;
-                background-color: white;
-                padding: 30px;
-                border-radius: 12px;
-                border: 2px solid #000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+            td {
+                display: block;
+                width: 100% !important;
             }
-            h2 
-            {
-                text-align: center;
-                color: #000;
-                margin-bottom: 25px;
+
+            td:first-child {
+                border-bottom: none;
+                padding-bottom: 5px;
             }
-            table 
-            {
-                width: 100%;
-                border-collapse: collapse;
+
+            td:last-child {
+                padding-top: 5px;
             }
-            td 
-            {
-                padding: 12px;
-                border-bottom: 1px solid #ddd;
-            }
-            td:first-child 
-            {
-                width: 35%;
-                font-weight: bold;
-                color: #000;
-            }
-            td:last-child 
-            {
-                color: #444;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="profile-box">
-            <h2>My Profile</h2>
-            <table>
-                <tr>
-                    <td>Name</td>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
-                </tr>
-                <tr>
-                    <td>Age</td>
-                    <td>{{ profile.age }}</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>{{ user.email }}</td>
-                </tr>
-                <tr>
-                    <td>Phone Number</td>
-                    <td>{{ profile.contact }}</td>
-                </tr>
-                <tr>
-                    <td>Date of Birth</td>
-                    <td>{{ profile.date_of_birth }}</td>
-                </tr>
-                <tr>
-                    <td>Address</td>
-                    <td>{{ profile.address }}</td>
-                </tr>
-            </table>
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="profile-box">
+
+        <h2>My Profile</h2>
+
+
+        <!-- ================= PROFILE IMAGE ================= -->
+
+        <div class="photo-box">
+
+            {% if profile and profile.profile_photo %}
+
+                <img
+                    src="{{ profile.profile_photo.url }}"
+                    class="profile-photo"
+                    alt="Profile Photo">
+
+            {% else %}
+
+                <img
+                    src="{% static 'Images/Profile.png' %}"
+                    class="profile-photo"
+                    alt="Default Profile Photo">
+
+            {% endif %}
+
+            <div class="photo-name">
+                {{ registration.user_name }}
+            </div>
+
         </div>
-    </body>
+
+
+        <!-- ================= PROFILE DETAILS ================= -->
+
+        <table>
+
+            <!-- Name -->
+
+            <tr>
+
+                <td>
+                    Name
+                </td>
+
+                <td>
+                    {{ registration.user_name }}
+                </td>
+
+            </tr>
+
+
+            <!-- Age -->
+
+            <tr>
+
+                <td>
+                    Age
+                </td>
+
+                <td>
+                    {% if profile.age %}
+                        {{ profile.age }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </td>
+
+            </tr>
+
+
+            <!-- Email -->
+
+            <tr>
+
+                <td>
+                    Email
+                </td>
+
+                <td>
+                    {{ registration.user_email }}
+                </td>
+
+            </tr>
+
+
+            <!-- Phone -->
+
+            <tr>
+
+                <td>
+                    Phone Number
+                </td>
+
+                <td>
+                    {{ registration.user_contact }}
+                </td>
+
+            </tr>
+
+
+            <!-- Date of Birth -->
+
+            <tr>
+
+                <td>
+                    Date of Birth
+                </td>
+
+                <td>
+                    {% if profile.date_of_birth %}
+                        {{ profile.date_of_birth }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </td>
+
+            </tr>
+
+
+            <!-- Address -->
+
+            <tr>
+
+                <td>
+                    Address
+                </td>
+
+                <td>
+                    {% if registration.user_address %}
+                        {{ registration.user_address }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <!-- ================= BACK BUTTON ================= -->
+
+        <a
+            href="{% url 'User:UserDashboard' %}"
+            class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</body>
+
 </html>

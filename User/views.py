@@ -229,8 +229,103 @@ def MyProfile(request):
         return redirect('User:MyProfile')
     return render(request,'User/MyProfile.html',{'user':user,'profile':profile})
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+from Guest.models import tbl_registration
+from .models import tbl_UserProfile
+
+
 def EditProfile(request):
-    return MyProfile(request)
+
+    if not request.session.get('user_id'):
+        return redirect('Guest:Login')
+
+    user_id = request.session.get('user_id')
+
+    try:
+        registration = tbl_registration.objects.get(
+            id=user_id
+        )
+    except tbl_registration.DoesNotExist:
+        return redirect('Guest:Login')
+
+
+    profile, created = tbl_UserProfile.objects.get_or_create(
+        user=registration
+    )
+
+
+    if request.method == "POST":
+
+        # Registration table
+
+        registration.user_name = request.POST.get(
+            'user_name'
+        )
+
+        registration.user_email = request.POST.get(
+            'user_email'
+        )
+
+        registration.user_contact = request.POST.get(
+            'user_contact'
+        )
+
+        registration.user_address = request.POST.get(
+            'user_address'
+        )
+
+        registration.save()
+
+
+        # User Profile table
+
+        age = request.POST.get('age')
+
+        if age:
+            profile.age = age
+
+
+        date_of_birth = request.POST.get(
+            'date_of_birth'
+        )
+
+        if date_of_birth:
+            profile.date_of_birth = date_of_birth
+
+
+        profile_photo = request.FILES.get(
+            'profile_photo'
+        )
+
+        if profile_photo:
+            profile.profile_photo = profile_photo
+
+
+        profile.save()
+
+
+        # Update session
+
+        request.session['user_name'] = registration.user_name
+        request.session['user_email'] = registration.user_email
+
+
+        messages.success(
+            request,
+            "Profile updated successfully."
+        )
+
+        return redirect('User:EditProfile')
+    return render(
+        request,
+        'User/EditProfile.html',
+        {
+            'registration': registration,
+            'profile': profile,
+        }
+    )
 
 def ChangePassword(request):
     user,response=guard(request)
