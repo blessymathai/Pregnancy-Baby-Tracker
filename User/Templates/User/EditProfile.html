@@ -1,162 +1,212 @@
 {% load static %}
 
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Edit Profile</title>
+
 
     <style>
 
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
 
+
         body {
-            margin: 0;
+
+            background: #f5faff;
+
             padding: 40px;
-            background-color: #f5faff;
+
         }
+
 
         .profile-box {
+
             max-width: 700px;
+
             margin: auto;
-            background-color: white;
+
+            background: white;
+
             padding: 30px;
-            border-radius: 12px;
+
             border: 2px solid #000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.08);
+
         }
+
 
         h2 {
+
             text-align: center;
-            color: #000;
+
             margin-bottom: 25px;
-        }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        td:first-child {
-            width: 35%;
-            font-weight: bold;
             color: #000;
+
         }
+
+
+        .current-photo {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .current-photo img {
+
+            width: 130px;
+
+            height: 130px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 2px solid #000;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+
+        }
+
 
         input,
         textarea {
+
             width: 100%;
+
             padding: 11px;
-            border: 1px solid #b9e7f8;
+
+            border: 1px solid #000;
+
             border-radius: 6px;
+
             font-size: 15px;
+
         }
+
+
+        textarea {
+
+            resize: vertical;
+
+        }
+
 
         input:focus,
         textarea:focus {
+
             outline: none;
-            border-color: #72c9eb;
+
+            border-color: #9ddcf5;
+
         }
 
-        textarea {
-            resize: vertical;
-        }
-
-        /* Profile Image */
-
-        .photo-box {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .profile-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #9ddcf5;
-        }
-
-        .photo-box input {
-            margin-top: 15px;
-            border: none;
-        }
-
-        /* Update Button */
 
         .update-btn {
-            background-color: #9ddcf5;
+
+            background: #9ddcf5;
+
             color: #000;
-            border: 2px solid #000;
-            padding: 11px 25px;
+
+            border: 1px solid #000;
+
+            padding: 11px 20px;
+
             border-radius: 6px;
-            font-size: 15px;
+
             font-weight: bold;
+
             cursor: pointer;
+
         }
+
 
         .update-btn:hover {
-            background-color: #72c9eb;
+
+            background: #f3a6c2;
+
         }
 
-        /* Back Button */
 
         .back-btn {
+
             display: inline-block;
-            background-color: #000;
-            color: white;
-            padding: 11px 25px;
-            border-radius: 6px;
+
+            margin-left: 8px;
+
+            padding: 11px 20px;
+
+            background: white;
+
+            color: #000;
+
             text-decoration: none;
-            font-size: 15px;
+
+            border: 1px solid #000;
+
+            border-radius: 6px;
+
             font-weight: bold;
-            margin-top: 10px;
+
         }
+
 
         .back-btn:hover {
-            background-color: #f3a6c2;
-            color: #000;
+
+            background: #eee;
+
         }
 
-        /* Message */
 
         .message {
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
+
+            padding: 12px;
+
+            margin-bottom: 20px;
+
+            background: #dff5fc;
+
+            border: 1px solid #000;
+
             border-radius: 6px;
-            background-color: #dff6ff;
-            border: 1px solid #9ddcf5;
-        }
-
-        @media (max-width: 600px) {
-
-            body {
-                padding: 20px;
-            }
-
-            .profile-box {
-                padding: 20px;
-            }
-
-            td {
-                display: block;
-                width: 100% !important;
-            }
 
         }
 
@@ -167,19 +217,23 @@
 
 <body>
 
+
 <div class="profile-box">
 
-    <h2>Edit Profile</h2>
 
+    <h2>
+        ✏️ Edit Profile
+    </h2>
 
-    <!-- Success Message -->
 
     {% if messages %}
 
         {% for message in messages %}
 
             <div class="message">
+
                 {{ message }}
+
             </div>
 
         {% endfor %}
@@ -187,212 +241,173 @@
     {% endif %}
 
 
-    <!-- EDIT PROFILE FORM -->
-
-    <form method="POST"
-          enctype="multipart/form-data">
+    <form
+        method="POST"
+        enctype="multipart/form-data">
 
         {% csrf_token %}
 
-        <table>
 
+        <!-- PROFILE IMAGE -->
 
-            <!-- Profile Photo -->
+        <div class="current-photo">
 
-            <tr>
+            {% if profile.profile_photo %}
 
-                <td colspan="2">
+                <img
+                    src="{{ profile.profile_photo.url }}"
+                    alt="Profile Photo">
 
-                    <div class="photo-box">
+            {% else %}
 
-                        {% if profile.profile_photo %}
+                <img
+                    src="{% static 'Images/Profile.png' %}"
+                    alt="Default Profile">
 
-                            <img
-                                src="{{ profile.profile_photo.url }}"
-                                class="profile-photo"
-                                alt="Profile Photo">
+            {% endif %}
 
-                        {% else %}
+        </div>
 
-                            <img
-                                src="{% static 'Images/Profile.png' %}"
-                                class="profile-photo"
-                                alt="Profile Photo">
 
-                        {% endif %}
+        <div class="form-group">
 
-                        <br>
+            <label>
+                Profile Photo
+            </label>
 
-                        <input
-                            type="file"
-                            name="profile_photo"
-                            accept="image/*">
+            <input
+                type="file"
+                name="profile_photo"
+                accept="image/*">
 
-                    </div>
+        </div>
 
-                </td>
 
-            </tr>
+        <!-- NAME -->
 
+        <div class="form-group">
 
-            <!-- Name -->
+            <label>
+                Name
+            </label>
 
-            <tr>
+            <input
+                type="text"
+                name="user_name"
+                value="{{ registration.user_name }}"
+                required>
 
-                <td>Name</td>
+        </div>
 
-                <td>
 
-                    <input
-                        type="text"
-                        name="user_name"
-                        value="{{ registration.user_name }}"
-                        placeholder="Enter name"
-                        required>
+        <!-- AGE -->
 
-                </td>
+        <div class="form-group">
 
-            </tr>
+            <label>
+                Age
+            </label>
 
+            <input
+                type="number"
+                name="age"
+                min="1"
+                max="120"
+                value="{{ profile.age|default:'' }}">
 
-            <!-- Age -->
+        </div>
 
-            <tr>
 
-                <td>Age</td>
+        <!-- EMAIL -->
 
-                <td>
+        <div class="form-group">
 
-                    <input
-                        type="number"
-                        name="age"
-                        value="{{ profile.age|default:'' }}"
-                        placeholder="Enter age">
+            <label>
+                Email
+            </label>
 
-                </td>
+            <input
+                type="email"
+                name="user_email"
+                value="{{ registration.user_email }}"
+                required>
 
-            </tr>
+        </div>
 
 
-            <!-- Email -->
+        <!-- PHONE -->
 
-            <tr>
+        <div class="form-group">
 
-                <td>Email</td>
+            <label>
+                Phone
+            </label>
 
-                <td>
+            <input
+                type="tel"
+                name="user_contact"
+                value="{{ registration.user_contact }}"
+                required>
 
-                    <input
-                        type="email"
-                        name="user_email"
-                        value="{{ registration.user_email }}"
-                        placeholder="Enter email"
-                        required>
+        </div>
 
-                </td>
 
-            </tr>
+        <!-- DOB -->
 
+        <div class="form-group">
 
-            <!-- Phone -->
+            <label>
+                Date of Birth
+            </label>
 
-            <tr>
+            <input
+                type="date"
+                name="date_of_birth"
+                value="{{ profile.date_of_birth|date:'Y-m-d' }}">
 
-                <td>Phone Number</td>
+        </div>
 
-                <td>
 
-                    <input
-                        type="tel"
-                        name="user_contact"
-                        value="{{ registration.user_contact }}"
-                        placeholder="Enter phone number">
+        <!-- ADDRESS -->
 
-                </td>
+        <div class="form-group">
 
-            </tr>
+            <label>
+                Address
+            </label>
 
+            <textarea
+                name="user_address"
+                rows="4">{{ registration.user_address }}</textarea>
 
-            <!-- Date of Birth -->
+        </div>
 
-            <tr>
 
-                <td>Date of Birth</td>
+        <!-- BUTTONS -->
 
-                <td>
+        <button
+            type="submit"
+            class="update-btn">
 
-                    <input
-                        type="date"
-                        name="date_of_birth"
-                        value="{{ profile.date_of_birth|date:'Y-m-d' }}">
+            Update Profile
 
-                </td>
+        </button>
 
-            </tr>
 
+        <a
+            href="{% url 'User:UserDashboard' %}"
+            class="back-btn">
 
-            <!-- Address -->
+            ← Back
 
-            <tr>
+        </a>
 
-                <td>Address</td>
-
-                <td>
-
-                    <textarea
-                        name="user_address"
-                        rows="3"
-                        placeholder="Enter address">{{ registration.user_address }}</textarea>
-
-                </td>
-
-            </tr>
-
-
-            <!-- Update -->
-
-            <tr>
-
-                <td colspan="2"
-                    align="center">
-
-                    <button
-                        type="submit"
-                        class="update-btn">
-
-                        Update Profile
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-
-            <!-- Back -->
-
-            <tr>
-
-                <td colspan="2"
-                    align="center">
-
-                    <a
-                        href="{% url 'User:UserDashboard' %}"
-                        class="back-btn">
-
-                        ← Back
-
-                    </a>
-
-                </td>
-
-            </tr>
-
-        </table>
 
     </form>
 
+
 </div>
+
 
 </body>
 

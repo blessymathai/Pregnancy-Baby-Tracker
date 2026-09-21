@@ -5,6 +5,28 @@ from django.utils import timezone
 # Create your models here.
 
 class tbl_UserProfile(models.Model):
+    registration = models.OneToOneField(
+        'Guest.tbl_registration',
+        on_delete=models.CASCADE,
+        related_name='user_profile'
+    )
+
+    age = models.IntegerField(null=True, blank=True)
+
+    date_of_birth = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    profile_photo = models.ImageField(
+        upload_to='profile_photos/',
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.registration.user_name
+class tbl_UserProfile(models.Model):
     user = models.ForeignKey(tbl_registration,on_delete=models.CASCADE,null=True,blank=True,related_name='user_profile')
     age = models.PositiveIntegerField(null=True, blank=True)
     contact = models.CharField(max_length=20, blank=True)
