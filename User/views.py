@@ -112,19 +112,72 @@ def Nutrition(request):
     recs=nutrition_recommendations(query)
     return render(request,'User/Nutrition.html',{'user':user,'recommendations':recs,'query':query})
 
+# def Appointments(request):
+#     user,response=guard(request)
+#     if response:return response
+#     doctors=tbl_Doctor.objects.filter(available=True).select_related('user')
+#     if request.method=='POST':
+#         doctor=get_object_or_404(tbl_Doctor,id=request.POST.get('doctor'))
+#         tbl_Appointment.objects.create(
+#             patient=user,doctor=doctor,appointment_date=request.POST.get('appointment_date'),
+#             appointment_time=request.POST.get('appointment_time'),reason=request.POST.get('reason','')
+#         )
+#         messages.success(request,'Appointment requested.')
+#         return redirect('User:Appointments')
+#     return render(request,'User/Appointments.html',{'user':user,'doctors':doctors,'appointments':user.appointments.select_related('doctor').all()})
+
 def Appointments(request):
-    user,response=guard(request)
-    if response:return response
-    doctors=tbl_Doctor.objects.filter(available=True).select_related('user')
-    if request.method=='POST':
-        doctor=get_object_or_404(tbl_Doctor,id=request.POST.get('doctor'))
-        tbl_Appointment.objects.create(
-            patient=user,doctor=doctor,appointment_date=request.POST.get('appointment_date'),
-            appointment_time=request.POST.get('appointment_time'),reason=request.POST.get('reason','')
+
+    user, response = guard(request)
+
+    if response:
+        return response
+
+    doctors = tbl_Doctor.objects.filter(
+        available=True
+    ).select_related('user')
+
+    if request.method == 'POST':
+
+        doctor_id = request.POST.get('doctor')
+
+        doctor = get_object_or_404(
+            tbl_Doctor,
+            id=doctor_id,
+            available=True
         )
-        messages.success(request,'Appointment requested.')
+
+        tbl_Appointment.objects.create(
+            patient=user,
+            doctor=doctor,
+            appointment_date=request.POST.get('appointment_date'),
+            appointment_time=request.POST.get('appointment_time'),
+            reason=request.POST.get('reason', ''),
+            status='Pending'
+        )
+
+        messages.success(
+            request,
+            'Appointment booked successfully.'
+        )
+
         return redirect('User:Appointments')
-    return render(request,'User/Appointments.html',{'user':user,'doctors':doctors,'appointments':user.appointments.select_related('doctor').all()})
+
+    appointments = tbl_Appointment.objects.filter(
+        patient=user
+    ).select_related(
+        'doctor',
+        'doctor__user'
+    ).order_by('-appointment_date', '-appointment_time')
+
+    return render(
+        request,
+        'User/Appointments.html',
+        {
+            'Doctors': doctors,
+            'Appointments': appointments
+        }
+    )
 
 def Profile(request):
     user,response=guard(request)

@@ -3,17 +3,18 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
-
 from Guest.models import tbl_registration
-from User.models import tbl_PregnancyTracker, tbl_Baby
-
+from User.models import (
+    tbl_UserProfile,
+    tbl_PregnancyTracker,
+    tbl_Baby,
+)
 from .models import (
     tbl_Doctor,
     tbl_Appointment,
     tbl_Prescription,
-    tbl_Message
+    tbl_Message,
 )
-
 
 # =========================================================
 # DOCTOR LOGIN USER
@@ -134,30 +135,33 @@ def DoctorDashboard(request):
 # =========================================================
 
 def Patients(request):
+    # Display all registered user/patient profiles
+    patients = tbl_UserProfile.objects.select_related("user").all()
 
-    user, response = guard(request)
-
-    if response:
-        return response
-
-    doctor = get_object_or_404(
-        tbl_Doctor,
-        user=user
+    return render(
+        request,
+        "Doctor/Patients.html",
+        {
+            "patients": patients
+        }
     )
 
-    patients = tbl_registration.objects.filter(
-        role='USER',
-        is_active=True
+
+def PatientDetails(request, patient_id):
+    # Display one selected patient
+    patient = get_object_or_404(
+        tbl_UserProfile.objects.select_related("user"),
+        id=patient_id
     )
 
     return render(
         request,
-        'Doctor/Patients.html',
+        "Doctor/Patient.html",
         {
-            'doctor': doctor,
-            'patients': patients
+            "patient": patient
         }
     )
+
 
 
 # =========================================================
@@ -166,14 +170,91 @@ def Patients(request):
 
 def Appointments(request):
 
-    user, response = guard(request)
-
-    if response:
-        return response
+    doctor_user_id = request.session.get('user_id')
 
     doctor = get_object_or_404(
         tbl_Doctor,
-        user=user
+        user_id=doctor_user_id
+    )
+
+    appointments = tbl_Appointment.objects.filter(
+        doctor=doctor
+    ).select_related(
+        'patient'
+    ).order_by(
+        '-appointment_date',
+        '-appointment_time'
+    )
+
+    return render(
+        request,
+        'Doctor/Appointments.html',
+        {
+            'Appointments': appointments
+        }
+    )
+    # -----------------------------------------------------
+    # UPDATE APPOINTMENT STATUS
+    # -----------------------------------------------------
+
+    if request.method == 'POST':
+
+        appointment_id = request.POST.get(
+            'appointment_id'
+        )
+
+        status = request.POST.get(
+            'status'
+        )
+
+        appointment = get_object_or_404(
+            tbl_Appointment,
+            id=appointment_id,
+            doctor=doctor
+        )
+
+        if status in [
+            'Pending',
+            'Approved',
+            'Rejected',
+            'Completed'
+        ]:
+
+            appointment.status = status
+
+            appointment.save(
+                update_fields=['status']
+            )
+
+            messages.success(
+                request,
+                f'Appointment {status.lower()} successfully.'
+            )
+
+        return redirect(
+            'Doctor:Appointments'
+        )
+
+    # -----------------------------------------------------
+    # DISPLAY APPOINTMENTS
+    # -----------------------------------------------------
+
+    appointments = tbl_Appointment.objects.filter(
+        doctor=doctor
+    ).select_related(
+        'patient'
+    ).order_by(
+        '-appointment_date',
+        '-appointment_time'
+    )
+
+    return render(
+        request,
+        'Doctor/Appointments.html',
+        {
+            'doctor': doctor,
+            'appointments': appointments
+        }
     )
 
     # -----------------------------------------------------
@@ -233,6 +314,28 @@ def Appointments(request):
         }
     )
 
+def AcceptAppointment(request, appointment_id):
+    appointment = get_object_or_404(
+        tbl_Appointment,
+        id=appointment_id
+    )
+
+    appointment.status = 'Approved'
+    appointment.save()
+
+    return redirect('Doctor:Appointments')
+
+
+def RejectAppointment(request, appointment_id):
+    appointment = get_object_or_404(
+        tbl_Appointment,
+        id=appointment_id
+    )
+
+    appointment.status = 'Rejected'
+    appointment.save()
+
+    return redirect('Doctor:Appointments')
 
 # =========================================================
 # PREGNANCY RECORDS
@@ -240,26 +343,38 @@ def Appointments(request):
 
 def PregnancyRecords(request):
 
-    user, response = guard(request)
+    if request.method == "POST":
 
-    if response:
-        return response
+        mother = request.POST.get("mother")
+        last_period_date = request.POST.get("last_period_date")
+        expected_delivery_date = request.POST.get("expected_delivery_date")
+        current_week = request.POST.get("current_week")
+        weight = request.POST.get("weight")
+        symptoms = request.POST.get("symptoms")
 
-    doctor = get_object_or_404(
-        tbl_Doctor,
-        user=user
-    )
+        tbl_PregnancyTracker.objects.create(
+            mother=mother,
+            last_period_date=last_period_date,
+            expected_delivery_date=expected_delivery_date,
+            current_week=current_week,
+            weight=weight,
+            symptoms=symptoms
+        )
 
-    records = tbl_PregnancyTracker.objects.select_related(
-        'user'
-    ).all()
+        messages.success(
+            request,
+            "Pregnancy record added successfully."
+        )
+
+        return redirect("Doctor:PregnancyRecords")
+
+    pregnancy_records = tbl_PregnancyTracker.objects.all().order_by("-id")
 
     return render(
         request,
-        'Doctor/PregnancyRecords.html',
+        "Doctor/PregnancyRecords.html",
         {
-            'doctor': doctor,
-            'records': records
+            "pregnancy_records": pregnancy_records
         }
     )
 
@@ -270,27 +385,73 @@ def PregnancyRecords(request):
 
 def BabyRecords(request):
 
-    user, response = guard(request)
+    # ==========================
+    # ADD BABY RECORD
+    # ==========================
 
-    if response:
-        return response
+    if request.method == "POST":
 
-    doctor = get_object_or_404(
-        tbl_Doctor,
-        user=user
-    )
+        mother_name = request.POST.get("mother")
+        week = request.POST.get("week")
+        time = request.POST.get("time")
+        date = request.POST.get("date_of_birth")
+        weight = request.POST.get("weight")
 
-    records = tbl_Baby.objects.select_related(
-        'user'
-    ).all()
+        # Find registered mother
+        try:
+
+            mother = tbl_registration.objects.get(
+                user_name=mother_name,
+                role="USER"
+            )
+
+        except tbl_registration.DoesNotExist:
+
+            messages.error(
+                request,
+                "Mother not found. Please enter a registered mother name."
+            )
+
+            return redirect("Doctor:BabyRecords")
+
+        # Save baby record
+        tbl_Baby.objects.create(
+            user=mother,
+            week=week,
+            time=time,
+            date=date,
+            weight=weight
+        )
+
+        messages.success(
+            request,
+            "Baby record added successfully."
+        )
+
+        return redirect("Doctor:BabyRecords")
+
+
+    # ==========================
+    # DISPLAY BABY RECORDS
+    # ==========================
+
+    baby_records = tbl_Baby.objects.select_related(
+        "user"
+    ).all().order_by("-id")
+
+    total_babies = baby_records.count()
+
+
+    context = {
+        "baby_records": baby_records,
+        "total_babies": total_babies,
+    }
+
 
     return render(
         request,
-        'Doctor/BabyRecords.html',
-        {
-            'doctor': doctor,
-            'records': records
-        }
+        "Doctor/BabyRecords.html",
+        context
     )
 
 

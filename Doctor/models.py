@@ -1,5 +1,6 @@
 from django.db import models
 from Guest.models import tbl_registration
+# from Doctor.models import tbl_Doctor, tbl_Appointment
 from django.utils import timezone
 # Create your models here.
 
@@ -18,8 +19,8 @@ class tbl_Doctor(models.Model):
     class Meta:
         db_table = 'tbl_Doctor'
 
-    # def __str__(self):
-    #     return f'Dr. {self.name}'
+    def __str__(self):
+        return self.user.user_name
 
 class tbl_Appointment(models.Model):
     STATUS = [('Pending','Pending'),('Approved','Approved'),('Completed','Completed'),('Cancelled','Cancelled')]
@@ -29,8 +30,15 @@ class tbl_Appointment(models.Model):
     appointment_time = models.TimeField()
     reason = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending')
-    notes = models.TextField(blank=True)
+    doctor_note = models.TextField( blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f"{self.patient.user_name} - "
+            f"{self.doctor.name} - "
+            f"{self.status}"
+        )
 
     class Meta:
         db_table = 'tbl_Appointment'
@@ -59,3 +67,14 @@ class tbl_Message(models.Model):
     class Meta:
         db_table = 'tbl_Message'
         ordering = ['sent_at']
+
+class tbl_Baby(models.Model):
+    user = models.ForeignKey(tbl_registration,on_delete=models.CASCADE,null=True,blank=True)
+    week = models.IntegerField(null=True,blank=True)
+    time = models.TimeField(null=True,blank=True)
+    date = models.DateField(null=True,blank=True)
+    weight = models.FloatField(null=True,blank=True)
+    def __str__(self):
+        if self.user:
+            return self.user.user_name
+        return "Baby Record"

@@ -26,6 +26,7 @@ class tbl_UserProfile(models.Model):
 
     def __str__(self):
         return self.registration.user_name
+        
 class tbl_UserProfile(models.Model):
     user = models.ForeignKey(tbl_registration,on_delete=models.CASCADE,null=True,blank=True,related_name='user_profile')
     age = models.PositiveIntegerField(null=True, blank=True)

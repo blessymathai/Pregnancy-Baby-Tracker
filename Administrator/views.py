@@ -1,169 +1,9 @@
-# from pathlib import Path
-# import pandas as pd
-# from django.contrib import messages
-# from django.contrib.auth.hashers import make_password
-# from django.shortcuts import get_object_or_404, redirect, render
-# from Guest.models import tbl_registration
-# from Doctor.models import tbl_Doctor, tbl_Appointment
-# from User.models import tbl_PregnancyTracker
-# from .models import tbl_Milestone, tbl_Nutrition, tbl_Medicine, tbl_Dataset
-# from User.ml_model import MODEL_PATH, ENCODER_PATH
-
-# def homepage(request):
-#     return render(request,'homepage.html')
-
-# def Admin_guard(request):
-#     role = request.session.get('role')
-#     print("ADMIN GUARD ROLE:", role)
-#     if role != 'ADMIN':
-#         return redirect('Guest:Login')
-#     return None    
-
-# # def admin_guard(request):
-# #     if request.session.get('role')!='ADMIN': 
-# #         return redirect('Guest:Login') 
-# #     return None
-
-# def AdminDashboard(request):
-#     if (r:=admin_guard(request)): 
-#         return r
-#     return render(request,'Administrator/AdminDashboard.html',
-#     {
-#         'users':tbl_registration.objects.filter(role='USER').count(),
-#         'doctors':tbl_Doctor.objects.count(),
-#         'appointments':tbl_Appointment.objects.count(),
-#         'pregnancies':tbl_PregnancyTracker.objects.count(),
-#         'datasets':tbl_Dataset.objects.count(),
-#     })
-
-# def ManageUser(request):
-#     if (r:=admin_guard(request)): 
-#         return r
-#     if request.method=='POST':
-#         uid=request.POST.get('user_id')
-#         u=get_object_or_404(tbl_registration,id=uid,role='USER')
-#         u.is_active=not u.is_active; u.save()
-#         return redirect('Administrator:ManageUser')
-#     return render(request,'Administrator/ManageUser.html',{'users':tbl_registration.objects.filter(role='USER')})
-
-# def ManageDoctor(request):
-#     if (r:=admin_guard(request)): 
-#         return r
-#     if request.method=='POST':
-#         action=request.POST.get('action')
-#         if action=='add':
-#             email=request.POST.get('email','').lower()
-#             if tbl_registration.objects.filter(user_email=email).exists():
-#                 messages.error(request,'Email already exists.')
-#             else:
-#                 reg=tbl_registration.objects.create(
-#                     user_name=request.POST.get('name',''),user_email=email,
-#                     user_contact=request.POST.get('contact',''),user_address='',
-#                     user_password=make_password(request.POST.get('password','Doctor@123')),role='DOCTOR'
-#                 )
-#                 tbl_Doctor.objects.create(
-#                     user=reg,name=request.POST.get('name',''),
-#                     specialization=request.POST.get('specialization','General Medicine'),
-#                     qualification=request.POST.get('qualification',''),
-#                     experience=request.POST.get('experience') or 0,
-#                     hospital=request.POST.get('hospital',''),contact=request.POST.get('contact','')
-#                 )
-#                 messages.success(request,'Doctor added. Login uses the registered email/password.')
-#         elif action=='toggle':
-#             d=get_object_or_404(tbl_Doctor,id=request.POST.get('doctor'))
-#             d.available=not d.available; d.save()
-#         return redirect('Administrator:ManageDoctor')
-#     return render(request,'Administrator/ManageDoctor.html',{'doctors':tbl_Doctor.objects.select_related('user')})
-
-# def ManageMilestones(request):
-#     if (r:=admin_guard(request)): return r
-#     if request.method=='POST':
-#         tbl_Milestone.objects.update_or_create(week=request.POST.get('week'),defaults={
-#             'title':request.POST.get('title',''),'description':request.POST.get('description',''),'tips':request.POST.get('tips','')
-#         })
-#         messages.success(request,'Milestone saved.')
-#     return render(request,'Administrator/ManageMilestones.html',{'milestones':tbl_Milestone.objects.all()})
-
-# def ManageNutrition(request):
-#     if (r:=admin_guard(request)): return r
-#     if request.method=='POST':
-#         tbl_Nutrition.objects.create(name=request.POST.get('name',''),category=request.POST.get('category',''),
-#             calories=request.POST.get('calories') or 0,protein=request.POST.get('protein') or 0,
-#             iron=request.POST.get('iron') or 0,calcium=request.POST.get('calcium') or 0,
-#             fiber=request.POST.get('fiber') or 0,recommendation=request.POST.get('recommendation',''))
-#         messages.success(request,'Nutrition item added.')
-#     return render(request,'Administrator/ManageNutrition.html',{'items':tbl_Nutrition.objects.all()})
-
-# def ManageMedicines(request):
-#     if (r:=admin_guard(request)): return r
-#     if request.method=='POST':
-#         tbl_Medicine.objects.create(name=request.POST.get('name',''),dosage=request.POST.get('dosage',''),
-#                                      purpose=request.POST.get('purpose',''),warning=request.POST.get('warning',''))
-#         messages.success(request,'Medicine information saved.')
-#     return render(request,'Administrator/ManageMedicines.html',{'items':tbl_Medicine.objects.all()})
-
-# def Reports(request):
-#     if (r:=admin_guard(request)): return r
-#     return render(request,'Administrator/Reports.html',{
-#         'users':tbl_registration.objects.filter(role='USER').count(),'doctors':tbl_Doctor.objects.count(),
-#         'appointments':tbl_Appointment.objects.count(),'pregnancies':tbl_PregnancyTracker.objects.count()
-#     })
-
-# def UploadDataset(request):
-#     if (r:=admin_guard(request)): return r
-#     trained=False; error=None
-#     if request.method=='POST' and request.FILES.get('dataset'):
-#         f=request.FILES['dataset']
-#         dest=Path(request.session.get('dummy','')) if False else Path(__file__).resolve().parent.parent/'media'/'datasets'
-#         dest.mkdir(parents=True,exist_ok=True)
-#         path=dest/f.name
-#         with open(path,'wb') as out:
-#             for chunk in f.chunks(): out.write(chunk)
-#         try:
-#             df=pd.read_csv(path)
-#             from sklearn.ensemble import RandomForestClassifier
-#             from sklearn.preprocessing import LabelEncoder
-#             import joblib
-#             aliases={
-#                 'age':['Age','age'],'systolicbp':['Systolic BP','SystolicBP','systolicbp'],
-#                 'diastolicbp':['Diastolic','DiastolicBP','diastolicbp'],'blood_sugar':['BS','Blood sugar','blood_sugar'],
-#                 'bodytemp':['Body Temp','BodyTemp','bodytemp'],'heartrate':['Heart Rate','HeartRate','heartrate'],
-#                 'risk':['Risk Level','RiskLevel','risk']
-#             }
-#             def col(key):
-#                 for x in aliases[key]:
-#                     if x in df.columns:return x
-#                 return None
-#             chosen={k:col(k) for k in aliases}
-#             if not all(chosen.values()): raise ValueError('Dataset must contain age, BP, blood sugar, body temperature, heart rate and risk columns.')
-#             d=df[[chosen[k] for k in ['age','systolicbp','diastolicbp','blood_sugar','bodytemp','heartrate','risk']]].dropna()
-#             X=d.iloc[:,:6].astype(float); y=LabelEncoder().fit_transform(d.iloc[:,6].astype(str).str.lower())
-#             enc=LabelEncoder(); enc.fit(d.iloc[:,6].astype(str).str.lower()); y=enc.transform(d.iloc[:,6].astype(str).str.lower())
-#             model=RandomForestClassifier(n_estimators=200,random_state=42,class_weight='balanced').fit(X,y)
-#             joblib.dump(model,MODEL_PATH); joblib.dump(enc,ENCODER_PATH)
-#             tbl_Dataset.objects.create(name=f.name,file=f'./datasets/{f.name}',rows=len(df))
-#             trained=True
-#         except Exception as exc: error=str(exc)
-#     return render(request,'Administrator/UploadDataset.html',{'trained':trained,'error':error,'datasets':tbl_Dataset.objects.all()})
-
-# def ChatBox(request):
-#     if (r:=admin_guard(request)): return r
-#     answer=None
-#     if request.method=='POST':
-#         q=request.POST.get('message','').lower()
-#         answer=('Use the AI Prediction page for numeric maternal risk assessment.' if 'risk' in q
-#                 else 'The system connects pregnancy tracking, nutrition, appointments, doctors and maternal-risk ML prediction.'
-#                 )
-#     return render(request,'Administrator/ChatBox.html',{'answer':answer})
-
 from pathlib import Path
-
 import joblib
 import pandas as pd
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404, redirect, render
-
 from Guest.models import tbl_registration
 from Doctor.models import tbl_Doctor, tbl_Appointment
 from User.models import tbl_PregnancyTracker
@@ -287,35 +127,70 @@ def ManageMilestones(request):
         return redirect('Administrator:ManageMilestones')
     return render(request, 'Administrator/ManageMilestones.html', {'milestones': tbl_Milestone.objects.all()})
 
-
 def ManageNutrition(request):
-    if (r := admin_guard(request)): return r
-    if request.method == 'POST':
+
+    if request.method == "POST":
+
+        name = request.POST.get("name")
+        category = request.POST.get("category")
+        calories = request.POST.get("calories")
+        protein = request.POST.get("protein")
+        iron = request.POST.get("iron")
+        calcium = request.POST.get("calcium")
+        fiber = request.POST.get("fiber")
+        recommendation = request.POST.get("recommendation")
+
         tbl_Nutrition.objects.create(
-            name=request.POST.get('name', request.POST.get('txt_food', '')),
-            category=request.POST.get('category', request.POST.get('txt_category', '')),
-            calories=request.POST.get('calories') or 0, protein=request.POST.get('protein') or 0,
-            iron=request.POST.get('iron') or 0, calcium=request.POST.get('calcium') or 0,
-            fiber=request.POST.get('fiber') or 0,
-            recommendation=request.POST.get('recommendation', request.POST.get('txt_benefits', ''))
+            name=name,
+            category=category,
+            calories=calories or None,
+            protein=protein or None,
+            iron=iron or None,
+            calcium=calcium or None,
+            fiber=fiber or None,
+            recommendation=recommendation
         )
-        messages.success(request, 'Nutrition item added.')
-        return redirect('Administrator:ManageNutrition')
-    return render(request, 'Administrator/ManageNutrition.html', {'items': tbl_Nutrition.objects.all()})
+
+        messages.success(request, "Nutrition added successfully.")
+
+        return redirect("Administrator:ManageNutrition")
+
+    nutrition = tbl_Nutrition.objects.all().order_by("name")
+
+    return render(
+        request,
+        "Administrator/ManageNutrition.html",
+        {
+            "nutrition": nutrition
+        }
+    )
 
 
 def ManageMedicines(request):
-    if (r := admin_guard(request)): return r
-    if request.method == 'POST':
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        dosage = request.POST.get("dosage")
+        purpose = request.POST.get("purpose")
+        warning = request.POST.get("warning")
+
         tbl_Medicine.objects.create(
-            name=request.POST.get('name', request.POST.get('txt_medicine', '')),
-            dosage=request.POST.get('dosage', request.POST.get('txt_dosage', '')),
-            purpose=request.POST.get('purpose', request.POST.get('txt_description', '')),
-            warning=request.POST.get('warning', '')
+            name=name,
+            dosage=dosage,
+            purpose=purpose,
+            warning=warning
         )
-        messages.success(request, 'Medicine information saved.')
-        return redirect('Administrator:ManageMedicines')
-    return render(request, 'Administrator/ManageMedicines.html', {'items': tbl_Medicine.objects.all()})
+
+        messages.success(request, "Medicine added successfully.")
+        return redirect("Administrator:ManageMedicines")
+
+    medicines = tbl_Medicine.objects.all().order_by("id")
+
+    return render(
+        request,
+        "Administrator/ManageMedicines.html",
+        {"medicines": medicines}
+    )
 
 
 def Reports(request):
@@ -326,7 +201,6 @@ def Reports(request):
         'appointments': tbl_Appointment.objects.count(),
         'pregnancies': tbl_PregnancyTracker.objects.count()
     })
-
 
 def UploadDataset(request):
     if (r := admin_guard(request)): return r
